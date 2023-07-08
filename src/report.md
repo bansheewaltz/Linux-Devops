@@ -5,18 +5,18 @@ An installed system is a good thing, but what if someone else uses it? I'll teac
 - Result of running command\
   `cat /etc/issue`\
   that shows OS version:\
-  ![](screenshots/1.1.png)\
+  ![](screenshots/1.1.png)
 
 ## Part 2. Creating a user
 In our world, you can't go far without the Internet. However, since we want to train you for the role of a system administrator, I'll show you a little more than just setting up a network.
 Before we begin, I suggest reading about network interfaces and DHCP.
 
 - Admin user was added with the following command:\
-  ![](screenshots/2.1.png)\
+  ![](screenshots/2.1.png)
 - Successful result can be checked with:\
   `cat /etc/passwd`\
   and be seen by it's output on the last line:\
-  ![](screenshots/2.2.png)\
+  ![](screenshots/2.2.png)
 
 ## Part 3. Setting up the OS network
 Before we begin, I suggest reading about network interfaces and DHCP.
@@ -26,12 +26,12 @@ Before we begin, I suggest reading about network interfaces and DHCP.
   and the result can be checked by:\
   `hostnamectl`\
   in the first line of the output:\
-  ![](screenshots/3.1.png)\
+  ![](screenshots/3.1.png)
 - New machine's timezone was set by a command:\
   `sudo timedatectl set-timezone <timezone>`\
   and the result can be checked by:\
   `timedatectl`\
-  ![](screenshots/3.2.png)\
+  ![](screenshots/3.2.png)
 - To display a list of all network interfaces and the associated ip address typed the following command:\
   `ip addr show`\
   with the result:\
@@ -50,7 +50,7 @@ Before we begin, I suggest reading about network interfaces and DHCP.
   Internal ip address of the gateway aka default ip address can be obtained with the command:\
   `ip rout | grep -m 1 default`\
   as shown below:\
-![](screenshots/3.6.png)\
+![](screenshots/3.6.png)
 - To set static network settings, Netplan is used as the default network management tool for the latest Ubuntu versions. Configuration files for Netplan are written using YAML.\
   ![](screenshots/3.7.png)\
   In a case if we forgot to open file with sudo edition rights, e.g. using vim, we can pass the following command to save it without reopening:\
@@ -117,13 +117,13 @@ Although we have the correct time now, it may not always be that way. To avoid h
   Timesync is the minimalistic service to synchronize local time with NTP servers. The package contains the systemd-timesyncd system service that may be used to synchronize the local system clock with a remote Network Time Protocol server.
   We already have this service installed, but I'll proved the instruction to do it manually just in case:
     - To install the service, execute following command:\
-      `apt install systemd-timesyncd` \
+      `apt install systemd-timesyncd`
     - After the installation, service will be started automatically. You can verify it by running the following command:\
       `sudo systemctl status systemd-timesyncd`\
       With the output:\
-      ![](screenshots/6.1.png)\
+      ![](screenshots/6.1.png)
     - To synchronize the Linux system clock with an NTP server using timedatectl, you need to run the following command as root or use sudo:\
-      `sudo timedatectl set-ntp true`\
+      `sudo timedatectl set-ntp true`
 - Now we can check if everything's work fine
   Checking the time of the current time zone by\
   `timedatectl`\
@@ -133,7 +133,7 @@ Although we have the correct time now, it may not always be that way. To avoid h
   `timedatectl show`\
   wihch shows:\
   ![](screenshots/6.3.png)\
-  ##### The output of the commnad contains `NTPSynchronized=yes`, so we did everything right
+  The output of the commnad contains `NTPSynchronized=yes`, so we did everything right
 
 ## Part 7. Installing and using text editors
 
