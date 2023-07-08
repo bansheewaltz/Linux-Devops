@@ -93,7 +93,7 @@ How often were you told as a child that you forgot to say the "magic" word? One 
   `sudo usermod -aG sudo admin`\
   And the result is:\
   ![](screenshots/5.1.png)\
-  ##### The `sudo` utility provides an efficient way to temporarily grant users or user groups privileged access to system resources so that they can run commands that they cannot run under their regular accounts.
+      The `sudo` utility provides an efficient way to temporarily grant users or user groups privileged access to system resources so that they can run commands that they cannot run under their regular accounts.
 - Now we will try to change the OS hostname via the user created previously
   But firstly we need to set it's paswword trhough:\
   `sudo paswwd <username>`\
@@ -108,7 +108,7 @@ How often were you told as a child that you forgot to say the "magic" word? One 
   and finally we change the hostname by using:\
   `sudo hostnamectl set-hostname <newhostname>`\
   without forgetting to check the result:\
-  ![](screenshots/5.5.png)\
+  ![](screenshots/5.5.png)
 
 ## Part 6. Installing and configuring the time service
 Although we have the correct time now, it may not always be that way. To avoid having to set it every time yourself, there are time sync services.
@@ -187,7 +187,6 @@ Although we have the correct time now, it may not always be that way. To avoid h
       ![](screenshots/7.12.png)\
       Press `ctrl + K` + `F` to toggle search command. type in target string, press `Enter` to show the first occurrence
       after that you can hit `ctrl + L` to repeat the previous search to get to the next occurrences
-      ##### there is no search highlighting as I know for now
     - String replacement:
       Similar to search, but before pressing `Enter` we can choose replacement option by pressing `r`:\
       ![](screenshots/7.13.png)
@@ -197,7 +196,7 @@ It's convenient to have access from one computer to another over a network, isn'
 
 - Installing of the SSHd service:
   the following command do the work:\
-  `apt install openssh-server`\
+  `apt install openssh-server`
 - To make the service auto-start whenever the system boots type in the following:\
   `sudo systemctl enable --now ssh`\
   as shown below:\
@@ -205,7 +204,7 @@ It's convenient to have access from one computer to another over a network, isn'
 - We will reset the SSHd service to port 2022 by changing the according value at `/etc/ssh/sshd_config`:\
   ![](screenshots/8.2.png)\
   For changes to take effect we should restart the serice by command:\
-  `sudo systemctl restart ssh`\
+  `sudo systemctl restart ssh`
 - To check if everything works as it should, we will type in the following:\
   `ps -Af | grep sshd | head -1`\
   where
@@ -311,7 +310,7 @@ We got the information about the hard disk, but often it is much more interestin
   - percentage used: **22**
   The measurement unit in the report is **K** aka **KiB**.
 - The same command but with additional options for file system type and human-readable format outputs:\
-  ![](screenshots/11.2.png)\
+  ![](screenshots/11.2.png)
   - partition size: **14G**
   - space used: **2.9G**
   - space free: **11G**
@@ -333,7 +332,7 @@ df is not the only way to get information about disk space. I'll tell you about 
 - Also we can output the size of all contents of directorie by:\
   `sudo du -h <dirname>/*`\
   as an example:\
-  ![](screenshots/12.4.png)\
+  ![](screenshots/12.4.png)
 
 ## Part 13. Installing and using the **ncdu** utility
 You probably didn’t like much the format in which the du command outputs information. I understand you perfectly. So now we'll take a look at its improved version.
@@ -341,11 +340,11 @@ You probably didn’t like much the format in which the du command outputs infor
 - Install the `ncdu` utility with:\
   `sudp apt install ncdu`\
   the examples will be:
-  - /home directory:\
+  - `/home` directory:\
   ![](screenshots/13.1.png)
-  - /var directory:\
+  - `/var` directory:\
   ![](screenshots/13.2.png)
-  - /var/log directory:\
+  - `/var/log` directory:\
   ![](screenshots/13.3.png)
 
 ## Part 14. Working with system logs
