@@ -26,7 +26,7 @@ The russian version of the task can be found in the repository.
 
 ## Chapter I
 
-![linux_network](misc/images/linux_network.png)
+![linux_network](task/misc/images/linux_network.png)
 
 Planet Earth, USA, California, Compton, Seb's Jazz Club, nowadays.
 
@@ -69,7 +69,7 @@ The **OSI** model consists of seven different layers. Each layer is responsible 
 In a network based on the **TCP/IP** protocol stack, each host (computer or device connected to the network) has an IP address. IP address is 32-bit number. It is usually represented in dot-decimal notation, consisting of four decimal numbers, each ranging from 0 to 255, separated by dots, e.g., *192.168.0.1*.
 In general, an IP address is divided into two parts: the network (subnet) address and the host address:
 
-![subnetwork_mask](misc/images/subnetwork_mask.png)
+![subnetwork_mask](task/misc/images/subnetwork_mask.png)
 
 As you can see in the picture, there are such things as network and subnet.
 I think it's clear from the meaning of those words that IP addresses are divided into networks, and networks are divided into subnets using a subnet mask
@@ -89,7 +89,7 @@ It must be mentioned that the IP protocol has no notion of ports, **TCP** and **
 
 ### Routing
 
-![network_route](misc/images/network_route.png)
+![network_route](task/misc/images/network_route.png)
 
 You may ask, how does one computer connect to another one? How does it know where to send packets?
 
@@ -252,7 +252,7 @@ iptables –X
 **== Task ==**
 
 Network: \
-![part5_network](misc/images/part5_network.png)
+![part5_network](task/misc/images/part5_network.png)
 
 ##### Start five virtual machines (3 workstations (ws11, ws21, ws22) and 2 routers (r1, r2))
 
