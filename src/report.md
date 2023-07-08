@@ -76,7 +76,7 @@ You're probably wondering, "Is the system ready now?" It's not ready at all! We 
 - To update system packages, firstly we should use:\
   `sudo apt update`\
   the command fetches the latest version of the package list from the distro's software repository,
-  only after that we use:
+  only after that we use:\
   `sudo apt upgrade`\
   which actually downloads and installs the updates for each outdated package and dependency on your system.
 - The screenshot shows that everything is up to date:\
@@ -87,11 +87,11 @@ How often were you told as a child that you forgot to say the "magic" word? One 
 
 - To check if the user can use sudo command, we can utilize the following command:\
   `sudo -l -U <username>`\
-  For now previously created user does not have such right:
+  For now previously created user does not have such right:\
   ![](screenshots/5.1.png)\
   We can fix that by typing in:\
   `sudo usermod -aG sudo admin`\
-  And the result is:
+  And the result is:\
   ![](screenshots/5.1.png)\
   ##### The `sudo` utility provides an efficient way to temporarily grant users or user groups privileged access to system resources so that they can run commands that they cannot run under their regular accounts.
 - Now we will try to change the OS hostname via the user created previously
@@ -107,7 +107,7 @@ How often were you told as a child that you forgot to say the "magic" word? One 
   `whoami`\
   and finally we change the hostname by using:\
   `sudo hostnamectl set-hostname <newhostname>`\
-  without forgetting to check the result:
+  without forgetting to check the result:\
   ![](screenshots/5.5.png)\
 
 ## Part 6. Installing and configuring the time service
@@ -117,7 +117,7 @@ Although we have the correct time now, it may not always be that way. To avoid h
   Timesync is the minimalistic service to synchronize local time with NTP servers. The package contains the systemd-timesyncd system service that may be used to synchronize the local system clock with a remote Network Time Protocol server.
   We already have this service installed, but I'll proved the instruction to do it manually just in case:
     - To install the service, execute following command:\
-      `apt install systemd-timesyncd`\
+      `apt install systemd-timesyncd` \
     - After the installation, service will be started automatically. You can verify it by running the following command:\
       `sudo systemctl status systemd-timesyncd`\
       With the output:\
