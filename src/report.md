@@ -93,7 +93,7 @@ How often were you told as a child that you forgot to say the "magic" word? One 
   `sudo usermod -aG sudo admin`\
   And the result is:\
   ![](screenshots/5.1.png)\
-      The `sudo` utility provides an efficient way to temporarily grant users or user groups privileged access to system resources so that they can run commands that they cannot run under their regular accounts.
+  > The `sudo` utility provides an efficient way to temporarily grant users or user groups privileged access to system resources so that they can run commands that they cannot run under their regular accounts.
 - Now we will try to change the OS hostname via the user created previously
   But firstly we need to set it's paswword trhough:\
   `sudo paswwd <username>`\
