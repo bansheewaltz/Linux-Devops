@@ -80,7 +80,7 @@ You're probably wondering, "Is the system ready now?" It's not ready at all! We 
   `sudo apt upgrade`\
   which actually downloads and installs the updates for each outdated package and dependency on your system.
 - The screenshot shows that everything is up to date:\
-  ![](screenshots/4.1.png)\
+  ![](screenshots/4.1.png)
 
 ## Part 5. Using the **sudo** command
 How often were you told as a child that you forgot to say the "magic" word? One of those "magic" words was "please". Linux has its counterpart – _sudo_. The system won't perform some operations until it hears the "magic" word.
@@ -171,17 +171,17 @@ Although we have the correct time now, it may not always be that way. To avoid h
   - Vim:
     - String search:
       Press `/` to toggle search and type in the search query, press `Enter`:\
-      ![](screenshots/7.8.png)\
+      ![](screenshots/7.8.png)
     - String replacement:
       **command mode** type in `s/<pattern>/<pattern_replacement>` to replace one substring with another:\
-      ![](screenshots/7.9.png)\
+      ![](screenshots/7.9.png)
   - Nano:
     - String search: 
       Press `ctrl + W` to toggle search, type in the search query, press `Enter`:\
-      ![](screenshots/7.10.png)\
+      ![](screenshots/7.10.png)
     - String replacement:
       Press `ctrl + \` to toggle replacement command, type in target string, type in replacement string, press `y` to confirm\
-      ![](screenshots/7.11.png)\
+      ![](screenshots/7.11.png)
   - JOE:
     - String search:\
       ![](screenshots/7.12.png)\
@@ -190,7 +190,7 @@ Although we have the correct time now, it may not always be that way. To avoid h
       ##### there is no search highlighting as I know for now
     - String replacement:
       Similar to search, but before pressing `Enter` we can choose replacement option by pressing `r`:\
-      ![](screenshots/7.13.png)\
+      ![](screenshots/7.13.png)
     
 ## Part 8. Installing and basic setup of the **SSHD** service
 It's convenient to have access from one computer to another over a network, isn't it? But to make it not only convenient, but also safe, you should use SSH service.
@@ -214,7 +214,7 @@ It's convenient to have access from one computer to another over a network, isn'
   - `grep` finds lines that contain specified substring
   - `head -1` shows just the first line of the resulted set of lines
 - Reboot the system with:\
-  `sudo reboot`\
+  `sudo reboot`
 - To check the result we will use `netstat` command
   And if there is no `netstat` command on our system, we should install net-tools:\
   `sudo apt install net-tools`\
@@ -253,7 +253,7 @@ It's convenient to have access from one computer to another over a network, isn'
 If I were asked what useful things **top** and **htop** utilities do, I would answer in one word: everything.
 
 - Let's examine the output of `top` command:\
-  ![](screenshots/9.1.png)\
+  ![](screenshots/9.1.png)
   - uptime: 58 min;
   - number of authorised users: 1;
   - total system load: 0,00;
@@ -262,27 +262,27 @@ If I were asked what useful things **top** and **htop** utilities do, I would an
   - memory load: 187.3 MiB;
   - pid of the process with the highest memory usage: 749
     We can find this out by pressing `Shift + M` to sort processes by memory consumption:\
-    ![](screenshots/9.2.png)\
+    ![](screenshots/9.2.png)
   - pid of the process taking the most CPU time: 1768
     We can find this out by pressing `Shift + P}` to sort processes by CPU utilization:\
-    ![](screenshots/9.3.png)\
+    ![](screenshots/9.3.png)
 - Let's examine the output of `htop` command:\
-    ![](screenshots/9.4.png)\
+    ![](screenshots/9.4.png)
     - We can play with sorting by pressing `F6`:
       - sorted by PID:\
-      ![](screenshots/9.5.png)\
+      ![](screenshots/9.5.png)
       - sorted by PERCENT_CPU:\
-      ![](screenshots/9.6.png)\
+      ![](screenshots/9.6.png)
       - sorted by PERCENT_MEM:\
-      ![](screenshots/9.7.png)\
+      ![](screenshots/9.7.png)
       - sorted by TIME:\
-      ![](screenshots/9.8.png)\
+      ![](screenshots/9.8.png)
     - Filter by name with `F4`:\
-    ![](screenshots/9.9.png)\
+    ![](screenshots/9.9.png)
     - Search with `F3`:\
-    ![](screenshots/9.10.png)\
+    ![](screenshots/9.10.png)
     - Additional parameters can be added by pressing `F2`, and after the setup is ready, hit `F10` to save it:\
-    ![](screenshots/9.11.png)\
+    ![](screenshots/9.11.png)
 
 ## Part 10. Using the **fdisk** utility
 Now let's figure out how to get information about your hard disk. Especially for you I've put together a couple of examples of how to use the fdisk utility.
@@ -322,14 +322,14 @@ We got the information about the hard disk, but often it is much more interestin
 df is not the only way to get information about disk space. I'll tell you about another one.
 
 - output of the `du` command:\
-  ![](screenshots/12.1.png)\
+  ![](screenshots/12.1.png)
 - It is convenient to check the sizes of directories in bytes with:\
   `sudo du -bd 0 <dirnames>`\
   e.g:\
   ![](screenshots/12.2.png)\
   and in human-readable format:\
   `sudo du -hd 0 <dirnames>`\
-  ![](screenshots/12.3.png)\
+  ![](screenshots/12.3.png)
 - Also we can output the size of all contents of directorie by:\
   `sudo du -h <dirname>/*`\
   as an example:\
@@ -342,22 +342,22 @@ You probably didn’t like much the format in which the du command outputs infor
   `sudp apt install ncdu`\
   the examples will be:
   - /home directory:\
-  ![](screenshots/13.1.png)\
+  ![](screenshots/13.1.png)
   - /var directory:\
-  ![](screenshots/13.2.png)\
+  ![](screenshots/13.2.png)
   - /var/log directory:\
-  ![](screenshots/13.3.png)\
+  ![](screenshots/13.3.png)
 
 ## Part 14. Working with system logs
 A system administrator sometimes needs to review events which happened in a system in the recent past. Linux has system logs for that.
 
 - As examples we will check:
   - `/var/log/dmesg` using Vim:\
-  ![](screenshots/14.1.png)\
+  ![](screenshots/14.1.png)
   - `/var/log/syslog` using Nano:\
-  ![](screenshots/14.2.png)\
+  ![](screenshots/14.2.png)
   - `/var/log/auth.log` using JOE:\
-  ![](screenshots/14.3.png)\
+  ![](screenshots/14.3.png)
 - From this screenshot:\
   ![](screenshots/14.4.png)\
   we can define:
@@ -366,7 +366,7 @@ A system administrator sometimes needs to review events which happened in a syst
   - login method: **LOGIN**
 - Now, let's restart SSHd service and try to find service restart message in the logs:
   - restart by:\
-  `systemctl restart ssh`\
+  `systemctl restart ssh`
   - check the last lines in the `/var/log/syslog`:\
   ![](screenshots/14.5.png)\  
 
@@ -376,17 +376,17 @@ Phew, we finally got to the last part of my long narrative. I will now show you 
 - Using the job scheduler, we will set to run the `uptime` command in every 2 minutes.
   - to do it safely, run:\
   `cron -e`\
-    ##### -e edits the current crontab (jobs from the current user) using the editor specified by the VISUAL or EDITOR environment variables. After you exit the editor, the modified crontab is installed automatically.
+  Where `-e` edits the current crontab (jobs from the current user) using the editor specified by the VISUAL or EDITOR environment variables. After you exit the editor, the modified crontab is installed automatically.
   - type in your task in accordance with the template:\
-  ![](screenshots/15.1.png)\
+  ![](screenshots/15.1.png)
   - in our case it looks like:\
-  ![](screenshots/15.2.png)\
+  ![](screenshots/15.2.png)
 - Find lines in the system logs about the execution:\
-  ![](screenshots/15.3.png)\
+  ![](screenshots/15.3.png)
 - Display a list of current jobs for CRON by the command:\
   `crontab -l`\
   to display current user's CRON jobs as in the output:\
-  ![](screenshots/15.4.png)\
+  ![](screenshots/15.4.png)
 - To remove all tasks from the job scheduler we use:\
   `crontab -r`\
   with the result:\
