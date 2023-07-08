@@ -11,49 +11,49 @@ An installed system is a good thing, but what if someone else uses it? I'll teac
 In our world, you can't go far without the Internet. However, since we want to train you for the role of a system administrator, I'll show you a little more than just setting up a network.
 Before we begin, I suggest reading about network interfaces and DHCP.
 
-- Admin user was added with the following command:
+- Admin user was added with the following command:\
   ![](screenshots/2.1.png)
-- Successful result can be checked with: \
+- Successful result can be checked with:
   `cat /etc/passwd`
-  and be seen by it's output on the last line:
+  and be seen by it's output on the last line:\
   ![](screenshots/2.2.png)
 
 ## Part 3. Setting up the OS network
 Before we begin, I suggest reading about network interfaces and DHCP.
 
-- New machine's hostname was given by a command: 
-  `sudo hostnamectl set-hostname <new_name>`
+- New machine's hostname was given by a command: \
+  `sudo hostnamectl set-hostname <new_name>`\
   and the result can be checked by:
   `hostnamectl`
-  in the first line of the output:
+  in the first line of the output:\
   ![](screenshots/3.1.png)
-- New machine's timezone was set by a command:
-  `sudo timedatectl set-timezone <timezone>`
+- New machine's timezone was set by a command:\
+  `sudo timedatectl set-timezone <timezone>`\
   and the result can be checked by:
-  `timedatectl`
+  `timedatectl`\
   ![](screenshots/3.2.png)
 - To display a list of all network interfaces and the associated ip address typed the following command:
   `ip addr show`
-  with the result:
+  with the result:\
   ![](screenshots/3.3.png)
   where lo is a loopback device. You can imagine it as a virtual network device that is on all systems, even if they aren't connected to any network. It has an IP address of 127.0.0.1 and can be used to access network services locally. For example, if you run a webserver on your machine and browse to it with Firefox or Chromium on the same machine, then it will go via this network device.   
 - The device's IP address recieved from the DHCP server can be shown by using:
-  `hostname -i`
+  `hostname -i`\
   ![](screenshots/3.4.png)
   Where DHCP (Dynamic Host Configuration Protocol) is a network management protocol used to dynamically assign an IP address to any device, or node, on a network so it can communicate using IP. DHCP automates and centrally manages these configurations rather than requiring network administrators to manually assign IP addresses to all network devices. DHCP can be implemented on small local networks, as well as large enterprise networks.
-- We can define our external ip address of the gateway by using curl in combination with one of the options, e.g.
+- We can define our external ip address of the gateway by using curl in combination with one of the options, e.g.\
   `curl ident.me`
-  as shown below:
+  as shown below:\
   ![](screenshots/3.5.png)
-  And before that we can set the curl setting, which will properly adds newline char after any server response, which is not true by default. This can be achieved by using:
+  And before that we can set the curl setting, which will properly adds newline char after any server response, which is not true by default. This can be achieved by using:\
   `echo '-w "\n"' >> ~/.curlrc`
-  Internal ip address of the gateway aka default ip address can be obtained with the command:
+  Internal ip address of the gateway aka default ip address can be obtained with the command:\
   `ip rout | grep -m 1 default`
-  as shown below:
+  as shown below:\
 ![](screenshots/3.6.png)
-- To set static network settings, Netplan is used as the default network management tool for the latest Ubuntu versions. Configuration files for Netplan are written using YAML.
+- To set static network settings, Netplan is used as the default network management tool for the latest Ubuntu versions. Configuration files for Netplan are written using YAML.\
   ![](screenshots/3.7.png)
-  In a case if we forgot to open file with sudo edition rights, e.g. using vim, we can pass the following command to save it without reopening:
+  In a case if we forgot to open file with sudo edition rights, e.g. using vim, we can pass the following command to save it without reopening:\
   `:w !sudo >/dev/null %`
   What the command does:
   - :w = Write a file.
@@ -61,25 +61,25 @@ Before we begin, I suggest reading about network interfaces and DHCP.
   - tee = The output of the vi/vim write command is redirected using tee.
   - % = Triggers the use of the current filename.
 Simply put, the ‘tee’ command is run as sudo and follows the vi/vim command on the current filename given.
-- After the setup we should reboot the system, this can be done with:
+- After the setup we should reboot the system, this can be done with:\
   `sudo reboot`
-  To ensure that the settings were applied, check the previously edited file:
+  To ensure that the settings were applied, check the previously edited file:\
   ![](screenshots/3.8.png)
   and it's all good!
-- And as another check we successfuly ping some remote hosts:
+- And as another check we successfuly ping some remote hosts:\
   ![](screenshots/3.9.png)
   paying attention to the "0% packet loss" phrase in command output.
 
 ## Part 4. OS Update
 You're probably wondering, "Is the system ready now?" It's not ready at all! We haven't updated it to the latest version yet.
 
-- To update system packages, firstly we should use:
-  `sudo apt update`
+- To update system packages, firstly we should use:\
+  `sudo apt update`\
   the command fetches the latest version of the package list from the distro's software repository,
   only after that we use:
-  `sudo apt upgrade`
+  `sudo apt upgrade`\
   which actually downloads and installs the updates for each outdated package and dependency on your system.
-- The screenshot shows that everything is up to date:
+- The screenshot shows that everything is up to date:\
   ![](screenshots/4.1.png)
 
 ## Part 5. Using the **sudo** command
