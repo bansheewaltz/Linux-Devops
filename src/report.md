@@ -4,7 +4,7 @@ An installed system is a good thing, but what if someone else uses it? I'll teac
 - Ubuntu 20.04 Server LTS was installed.
 - Result of running command 
   `cat /etc/issue` 
-  that shows OS version:
+  that shows OS version:\
   ![](screenshots/1.1.png)
 
 ## Part 2. Creating a user
