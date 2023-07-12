@@ -16,7 +16,7 @@ So, let's start our dive into the wonderful world of networks by getting to know
 - Network address of 192.167.38.54/13 &mdash; **192.160.0.0**, can be defined by the command:
   `ipcalc <ipv4_address[/netmask]>`
   Output sample for the entry *192.167.38.54/13*:
-  ```bash
+  ```
   Address:   192.167.38.54        11000000.10100 111.00100110.00110110
   Netmask:   255.248.0.0 = 13     11111111.11111 000.00000000.00000000
   Wildcard:  0.7.255.255          00000000.00000 111.11111111.11111111
@@ -100,7 +100,7 @@ So, let's start our dive into the wonderful world of networks by getting to know
 Now let's figure out how to connect two machines using static routing.
 - View existing network interfaces with the `ip a` command:
   - **ws1** and **ws2** have the same output:
-    ```bash
+    ```
     1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
         link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
         inet 127.0.0.1/8 scope host lo
@@ -391,7 +391,7 @@ We will be configuring a network according to the picture:
 ![part5_network](../task/misc/images/part5_network.png)
 
 VM internal network setup will look like this:
-| net | hosts with direct connection |
+| net | hosts which are local to net |
 | --- | ---------------------------- |
 | r1p | ws11, r1                     |
 | rsh | r1, r2                       |
@@ -659,48 +659,126 @@ where **p** stands for *private* and **sh** for *shared*
     0 packets dropped by kernel
     ```
 #### 5.4. Adding static routes
-##### Add static routes to r1 and r2 in configuration file. Here is an example for r1 route to 10.20.0.0/26:
-```shell
-# Add description to the end of the eth1 network interface:
-- to: 10.20.0.0
-  via: 10.100.0.12
-```
-
-- Add screenshots of the changed *etc/netplan/00-installer-config.yaml* file for each router to the report.
-
-##### Call `ip r` and show route tables on both routers. Here is an example of the r1 table:
-```
-10.100.0.0/16 dev eth1 proto kernel scope link src 10.100.0.11
-10.20.0.0/26 via 10.100.0.12 dev eth1
-10.10.0.0/18 dev eth0 proto kernel scope link src 10.10.0.1
-```
-- Add a screenshot with the call and output of the used command to the report.
-##### Run `ip r list 10.10.0.0/[netmask]` and `ip r list 0.0.0.0/0` commands on ws11.
-- Add a screenshot with the call and the output of the used commands to the report.
-- Explain in the report why a different route other than 0.0.0.0/0 had been selected for 10.10.0.0/\[netmask\] although it could be the default route.
-
+- Add static routes to r1 and r2 in configuration file:
+  - r1 to *eth1*:
+    ```
+    ---x---
+          routes:
+            - to:  10.20.0.0
+              via: 10.100.0.12
+    ```
+  - r2 to *eth0*:
+    ```
+    ---x---
+          routes:
+            - to:  10.10.0.0
+              via: 10.100.0.11
+    ```
+- Call `ip r` and show route tables on both routers:
+  - r1:
+    ```
+    mark@r1:~$ ip r | grep eth
+    10.10.0.0/18 dev eth0 proto kernel scope link src 10.10.0.1 
+    10.20.0.0 via 10.100.0.12 dev eth1 proto static 
+    10.100.0.0/16 dev eth1 proto kernel scope link src 10.100.0.11 
+    ```
+  - r2:
+    ```
+    mark@r2:~$ ip r | grep eth
+    10.10.0.0 via 10.100.0.11 dev eth0 proto static 
+    10.20.0.0/26 dev eth1 proto kernel scope link src 10.20.0.1 
+    10.100.0.0/16 dev eth0 proto kernel scope link src 10.100.0.12 
+    ```
+- Run `ip r list 10.10.0.0/[netmask]` and `ip r list 0.0.0.0/0` commands on ws11:
+  ```
+  mark@ws11:~$ ip r list 10.10.0.0/18
+  10.10.0.0/18 dev eth0 proto kernel scope link src 10.10.0.2 
+  
+  mark@ws11:~$ ip r list 0.0.0.0/0 | grep eth
+  default via 10.10.0.1 dev eth0 proto static 
+  ```
+- If a packet is received on a routing device, the device first checks to see if the IP destination address is on one of the device’s local subnets. If the destination address is not local, the packet is forwarded to the next hop toward the destination using the default route(0.0.0.0).
+In our case the subnet 10.10.0.0/0 is local for our device, so device selects the route that was installed by the kernel during autoconfiguration &mdash; through the statically set ip address of our network interface.
 #### 5.5. Making a router list
-Here is an example of the **traceroute** utility output after adding a gateway:
-```
-1 10.10.0.1 0 ms 1 ms 0 ms
-2 10.100.0.12 1 ms 0 ms 1 ms
-3 10.20.0.10 12 ms 1 ms 3 ms
-```
-##### Run the `tcpdump -tnv -i eth0` dump command on r1
-##### Use **traceroute** utility to list routers in the path from ws11 to ws21
-- Add a screenshots with the call and the output of the used commands (tcpdump and traceroute) to the report.
-- Based on the output of the dump on r1, explain in the report how path construction works using **traceroute**.
+- Run the `sudo tcpdump -tnv -i eth0` dump command on r1
+- Use **traceroute** utility to list routers in the path from ws11 to ws21:
+  - ws1:
+    ```
+    mark@ws11:~$ traceroute ws22
+    traceroute to ws22 (10.20.0.20), 30 hops max, 60 byte packets
+     1  r1 (10.10.0.1)  0.484 ms  0.454 ms  0.436 ms
+     2  r2 (10.100.0.12)  0.948 ms  0.935 ms  0.918 ms
+     3  ws22 (10.20.0.20)  1.002 ms  0.984 ms  0.968 ms
+    ```
+  - r1:
+    ```
+    mark@r1:~$ sudo tcpdump -tnv -i eth0
+    tcpdump: listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
+    IP (tos 0x0, ttl 1, id 25199, offset 0, flags [none], proto UDP (17), length 60)
+        10.10.0.2.39586 > 10.20.0.20.33434: UDP, length 32
+    IP (tos 0xc0, ttl 64, id 823, offset 0, flags [none], proto ICMP (1), length 88)
+        10.10.0.1 > 10.10.0.2: ICMP time exceeded in-transit, length 68
+    	IP (tos 0x0, ttl 1, id 25199, offset 0, flags [none], proto UDP (17), length 60)
+        10.10.0.2.39586 > 10.20.0.20.33434: UDP, length 32
+    IP (tos 0x0, ttl 1, id 62707, offset 0, flags [none], proto UDP (17), length 60)
+        10.10.0.2.44720 > 10.20.0.20.33435: UDP, length 32
+    IP (tos 0x0, ttl 1, id 10965, offset 0, flags [none], proto UDP (17), length 60)
+        10.10.0.2.50716 > 10.20.0.20.33436: UDP, length 32
+    IP (tos 0x0, ttl 2, id 13456, offset 0, flags [none], proto UDP (17), length 60)
+        10.10.0.2.36903 > 10.20.0.20.33437: UDP, length 32
+    IP (tos 0x0, ttl 2, id 56223, offset 0, flags [none], proto UDP (17), length 60)
+        10.10.0.2.32985 > 10.20.0.20.33438: UDP, length 32
+    IP (tos 0xc0, ttl 64, id 824, offset 0, flags [none], proto ICMP (1), length 88)
+        10.10.0.1 > 10.10.0.2: ICMP time exceeded in-transit, length 68
+    	IP (tos 0x0, ttl 1, id 62707, offset 0, flags [none], proto UDP (17), length 60)
+        10.10.0.2.44720 > 10.20.0.20.33435: UDP, length 32
+    ...
+
+    32 packets captured
+    32 packets received by filter
+    0 packets dropped by kernel
+    ```
+Traceroute is a network diagnostic tool used to determine the path taken by packets from a source to a destination. It works by sending packets with gradually increasing Time to Live (TTL) values and examining the ICMP (Internet Control Message Protocol) Time Exceeded responses received from intermediate routers. Here's a simplified explanation of how path construction works in traceroute:
+
+1. When you run the traceroute command with a destination IP address or domain name, it starts by sending packets with a TTL value of 1.
+
+2. The first packet with a TTL of 1 reaches the first hop (the first router in the path) and gets its TTL decremented to 0. Since the TTL reaches zero, the router discards the packet and sends an ICMP Time Exceeded message back to the source.
+
+3. The source receives the ICMP Time Exceeded message and notes the IP address of the router that sent it. This IP address represents the first hop in the path.
+
+4. Traceroute then sends another packet with a TTL value of 2. This packet reaches the first hop successfully but expires at the second hop, generating another ICMP Time Exceeded message.
+
+5. This process continues, with the TTL value increasing by one for each subsequent packet, until the destination is reached or a maximum number of hops is reached (often 30 hops).
+
+6. Each intermediate router in the path decrements the TTL value by one, and the source records the IP addresses of the routers that generate the ICMP Time Exceeded messages. These IP addresses represent the successive hops in the path.
+
+7. Traceroute repeats this process multiple times to gather more accurate data and measure the round-trip time (RTT) for each hop.
+
+8. Finally, traceroute presents the collected information, including the IP addresses of the routers and the RTT for each hop, in a formatted output that illustrates the path taken by the packets from the source to the destination.
 
 #### 5.6. Using **ICMP** protocol in routing
-##### Run on r1 network traffic capture going through eth0 with the
-`tcpdump -n -i eth0 icmp` command.
-
-##### Ping a non-existent IP (e.g. *10.30.0.111*) from ws11 with the
-`ping -c 1 10.30.0.111` command.
-- Add a screenshot with the call and the output of the used commands to the report.
-
-##### Save dumps of the virtual machine images
-**p.s. Do not upload dumps to git under any circumstances!**
+- Run on r1 network traffic capture going through eth0 with the `sudo tcpdump -n -i eth0 icmp` command.
+- Ping a non-existent IP (e.g. *10.30.0.111*) from ws11 with the `ping -c 1 10.30.0.111` command:
+  - ws11:
+    ```
+    mark@ws11:~$ ping -c 1 10.30.0.111
+    PING 10.30.0.111 (10.30.0.111) 56(84) bytes of data.
+    
+    --- 10.30.0.111 ping statistics ---
+    1 packets transmitted, 0 received, 100% packet loss, time 0ms
+    ```
+  - r1:
+    ```
+    mark@r1:~$ sudo tcpdump -n -i eth0 icmp 
+    tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+    listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
+    20:18:44.274842 IP 10.10.0.2 > 10.30.0.111: ICMP echo request, id 61, seq 1, length 64
+    ^C
+    1 packet captured
+    1 packet received by filter
+    0 packets dropped by kernel
+    ```
+- Save dumps of the virtual machine images
 
 ## Part 6. Dynamic IP configuration using **DHCP**
 Our next step is to learn more about **DHCP** service, which you already know.
