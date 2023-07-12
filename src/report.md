@@ -633,18 +633,9 @@ where **p** stands for *private* and **sh** for *shared*
     10.20.0.0/26 dev eth0 proto kernel scope link src 10.20.0.20 
     ```
 - Ping r2 router from ws11 and show on r2 that the ping is reaching. To do this, use the `tcpdump ip -tn -i r2` command
-> where 
 > ip  prints only IPv4 packets
-                     -t  don't print a timestamp on each dump line.
-        -n  don't convert addresses (i.e., host addresses, port numbers,  etc.) to names.     
-<font size="1"> 
-  ```
-  where ip  prints only IPv4 packets
-        -t  don't print a timestamp on each dump line.
-        -n  don't convert addresses (i.e., host addresses, port numbers,  etc.) to names.     
-  ```
-</font>
-
+> -t  don't print a timestamp on each dump line.
+> -n  don't convert addresses (i.e., host addresses, port numbers,  etc.) to names.     
   - ws1:
     ```
     mark@ws11:~$ ping -c3 r2
