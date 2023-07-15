@@ -603,14 +603,14 @@ where **p** stands for *private* and **sh** for *shared*
               via: 10.10.0.1
     ```
   - ws21:
-    ```
+    ```yaml
     ---x---
           routes:
             - to:  default
               via: 10.20.0.1
     ```
   - ws22:
-    ```
+    ```yaml
     ---x---
           routes:
             - to:  default
@@ -661,14 +661,14 @@ where **p** stands for *private* and **sh** for *shared*
 #### 5.4. Adding static routes
 - Add static routes to r1 and r2 in configuration file:
   - r1 to *eth1*:
-    ```
+    ```yaml
     ---x---
           routes:
             - to:  10.20.0.0
               via: 10.100.0.12
     ```
   - r2 to *eth0*:
-    ```
+    ```yaml
     ---x---
           routes:
             - to:  10.10.0.0
@@ -824,7 +824,7 @@ We will do it on **r2**:
   ```
 - Specify MAC address at **ws11** by adding to *etc/netplan/00-installer-config.yaml*:
 `macaddress: 10:10:10:10:10:BA`, `dhcp4: true`:
-  ```
+  ```yaml
   network:
     ethernets:
       enp0s3:
@@ -842,7 +842,7 @@ We will do it on **r2**:
     version: 2
   ```
   > Unfortunately, this does not work with our further intends and purposes, so we can make some changes in advance &mdash; change the macaddress in the settings of the VM to newly specified, as well as update the macaddress in netplan settings which we used to give our interface a custom name, and of course we should delete an assignment of it in the line that follows *set-name* option:
-  ```
+  ```yaml
   network:
     ethernets:
       enp0s3:
