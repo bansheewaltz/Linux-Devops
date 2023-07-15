@@ -13,8 +13,8 @@ Linux networks configuration on virtual machines.
 ## Part 1. **ipcalc** tool
 So, let's start our dive into the wonderful world of networks by getting to know IP addresses. And for that we will use **ipcalc** tool.
 #### 1.1. Networks and Masks
-- Network address of 192.167.38.54/13 &mdash; **192.160.0.0**, can be defined by the command:
-  `ipcalc <ipv4_address[/netmask]>`
+- Network address of 192.167.38.54/13 &mdash; **192.160.0.0**, can be defined by the command:\
+  `ipcalc <ipv4_address[/netmask]>`\
   Output sample for the entry *192.167.38.54/13*:
   ```
   Address:   192.167.38.54        11000000.10100 111.00100110.00110110
@@ -208,7 +208,7 @@ Now let's figure out how to connect two machines using static routing.
     3 packets transmitted, 3 received, 0% packet loss, time 2017ms
     rtt min/avg/max/mdev = 1.001/1.068/1.141/0.057 ms
     ```
-But connection, created by this command will disappear after network or system restart.
+But connection created by this command will disappear after network or system restart.
 #### 2.2. Adding a static route with saving
 - To do a clean experiment, restart the machines
 - Adding static route from one machine to another using *etc/netplan/00-installer-config.yaml* file
@@ -391,7 +391,7 @@ We will be configuring a network according to the picture:
 ![part5_network](../task/misc/images/part5_network.png)
 
 VM internal network setup will look like this:
-| net | hosts which are local to net |
+| LAN | hosts which are local to LAN |
 | --- | ---------------------------- |
 | r1p | ws11, r1                     |
 | rsh | r1, r2                       |
@@ -576,9 +576,9 @@ where **p** stands for *private* and **sh** for *shared*
     rtt min/avg/max/mdev = 1.208/1.279/1.320/0.050 ms
     ```
 #### 5.2. Enabling IP forwarding.
-- To check whether IP forwarding is turned on or off, run the following command:
+- To check whether IP forwarding is turned on or off, run the following command:\
   `sysctl net.ipv4.ip_forward`
-- To enable IP forwarding temporarily, run the following command on the routers:
+- To enable IP forwarding temporarily, run the following command on the routers:\
   `sysctl -w net.ipv4.ip_forward=1`.
   *With this approach, the forwarding will not work after the system is rebooted.*
   - r1:
@@ -591,7 +591,7 @@ where **p** stands for *private* and **sh** for *shared*
     mark@r2:~$ sudo sysctl -w net.ipv4.ip_forward=1
     net.ipv4.ip_forward = 1
     ```
-- To enable IP forwarding permanently, open */etc/sysctl.conf* file and uncomment the following line iside it:
+- To enable IP forwarding permanently, open */etc/sysctl.conf* file and uncomment the following line iside it:\
   `# net.ipv4.ip_forward=1`
 #### 5.3. Default route configuration
 - Configure the default route (gateway) for the workstations. To do this, add `default` before the router's IP to the interface at the end of the configuration file:
@@ -741,19 +741,12 @@ In our case the subnet 10.10.0.0/0 is local for our device, so device selects th
 Traceroute is a network diagnostic tool used to determine the path taken by packets from a source to a destination. It works by sending packets with gradually increasing Time to Live (TTL) values and examining the ICMP (Internet Control Message Protocol) Time Exceeded responses received from intermediate routers. Here's a simplified explanation of how path construction works in traceroute:
 
 1. When you run the traceroute command with a destination IP address or domain name, it starts by sending packets with a TTL value of 1.
-
 2. The first packet with a TTL of 1 reaches the first hop (the first router in the path) and gets its TTL decremented to 0. Since the TTL reaches zero, the router discards the packet and sends an ICMP Time Exceeded message back to the source.
-
 3. The source receives the ICMP Time Exceeded message and notes the IP address of the router that sent it. This IP address represents the first hop in the path.
-
 4. Traceroute then sends another packet with a TTL value of 2. This packet reaches the first hop successfully but expires at the second hop, generating another ICMP Time Exceeded message.
-
 5. This process continues, with the TTL value increasing by one for each subsequent packet, until the destination is reached or a maximum number of hops is reached (often 30 hops).
-
 6. Each intermediate router in the path decrements the TTL value by one, and the source records the IP addresses of the routers that generate the ICMP Time Exceeded messages. These IP addresses represent the successive hops in the path.
-
 7. Traceroute repeats this process multiple times to gather more accurate data and measure the round-trip time (RTT) for each hop.
-
 8. Finally, traceroute presents the collected information, including the IP addresses of the routers and the RTT for each hop, in a formatted output that illustrates the path taken by the packets from the source to the destination.
 
 #### 5.6. Using **ICMP** protocol in routing
