@@ -358,13 +358,13 @@ iptables -X
   - Allow *echo reply* :
     `iptables -A OUTPUT -p icmp --icmp-type echo-reply -j ACCEPT`
   - Reject *echo reply* :
-    `iptables -A OUTPUT -p icmp --icmp-type echo-reply -j REJECT`\
-  
-  On **ws1** the deny rule comes before the allow, on **ws2** &mdash; vice versa.
+    `iptables -A OUTPUT -p icmp --icmp-type echo-reply -j REJECT`
+
+    > On **ws1** we will set the rules in a such way that the deny rule comes before the allow, on **ws2** &mdash; vice versa.
 - There should be no errors after running the script:
   - ![](screenshots/4.1.png)
   - ![](screenshots/4.2.png)
-- In a case of consecutive rules acting on `echo-reply` only a first is applied.
+- If a rule does match the packet, the rule takes the action indicated by the target, which may result in the packet being allowed to continue along the chain or not. On **ws1** first rule breaks the chain, on **ws2** &mdash; not.
 #### 4.2. **nmap** utility
 - So, the first machine can't be pinged, but at the same time, by using, **nmap** utility we can show that the machine host is up
   ```
@@ -782,87 +782,298 @@ Traceroute is a network diagnostic tool used to determine the path taken by pack
 
 ## Part 6. Dynamic IP configuration using **DHCP**
 Our next step is to learn more about **DHCP** service, which you already know.
-##### For r2, configure the **DHCP** service in the */etc/dhcp/dhcpd.conf* file:
+We will do it on **r2**:
+- Install DHCP server through `sudo apt install isc-dhcp-server`
+- Set the desired intefrace in */etc/default/isc-dhcp-server*, in our case:
+  ```
+  # On what interfaces should the DHCP server (dhcpd) serve DHCP requests?
+  #	Separate multiple interfaces with spaces, e.g. "eth0 eth1".
+  INTERFACESv4="eth0"
+  ```
+- Configure the **DHCP** service in the */etc/dhcp/dhcpd.conf* file:
+  1. specify the default router address, DNS-server and internal network address:
+      ```shell
+      subnet 10.100.0.0 netmask 255.255.0.0 {}
 
-##### 1) specify the default router address, DNS-server and internal network address. Here is an example of a file for r2:
-```shell
-subnet 10.100.0.0 netmask 255.255.0.0 {}
-
-subnet 10.20.0.0 netmask 255.255.255.192
-{
-    range 10.20.0.2 10.20.0.50;
-    option routers 10.20.0.1;
-    option domain-name-servers 10.20.0.1;
-}
-```
-##### 2) write `nameserver 8.8.8.8.` in a *resolv.conf* file
-- Add screenshots of the changed files to the report.
-##### Restart the **DHCP** service with `systemctl restart isc-dhcp-server`. Reboot the ws21 machine with `reboot` and show with `ip a` that it has got an address. Also ping ws22 from ws21.
-- Add a screenshot with the call and the output of the used commands to the report.
-
-##### Specify MAC address at ws11 by adding to *etc/netplan/00-installer-config.yaml*:
-`macaddress: 10:10:10:10:10:BA`, `dhcp4: true`
-- Add a screenshot of the changed *etc/netplan/00-installer-config.yaml* file to the report.
-##### Сonfigure r1 the same way as r2, but make the assignment of addresses strictly linked to the MAC-address (ws11). Run the same tests
-- Describe this part in the report the same way as for r2.
-##### Request ip address update from ws21
-- Add screenshots of ip before and after update to the report
-- Describe in the report what **DHCP** server options were used in this point.
-
-##### Save dumps of virtual machine images
-**p.s. Do not upload dumps to git under any circumstances!**
+      subnet 10.20.0.0 netmask 255.255.255.192
+      {
+          range 10.20.0.2 10.20.0.50;
+          option routers 10.20.0.1;
+          option domain-name-servers 10.20.0.1;
+      }
+      ```
+  2. write `nameserver 8.8.8.8.` in a *resolv.conf* file:
+      ```
+      nameserver 8.8.8.8
+      options edns0 trust-ad
+      ```
+- Restart the **DHCP** service with `sudo systemctl restart isc-dhcp-server`.
+- In netplan's settings turn on *dhcp4* protocol on the **ws21** and check with `ip a` that it has got a dynamic address:
+  ```
+  mark@ws21:~$ ip -4 a | grep eth
+  3: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+      inet 10.20.0.10/26 brd 10.20.0.63 scope global eth0
+      inet 10.20.0.2/26 brd 10.20.0.63 scope global secondary dynamic eth0
+  ```
+- Turn off static ip address. It can be done by commenting the line with it out in netplan's settings file.
+- Ping **ws22** from **ws21**:
+  ```
+  mark@ws21:~$ ping -c3 ws22
+  PING ws22 (10.20.0.20) 56(84) bytes of data.
+  64 bytes from ws22 (10.20.0.20): icmp_seq=1 ttl=64 time=0.373 ms
+  64 bytes from ws22 (10.20.0.20): icmp_seq=2 ttl=64 time=1.02 ms
+  64 bytes from ws22 (10.20.0.20): icmp_seq=3 ttl=64 time=0.359 ms
+  
+  --- ws22 ping statistics ---
+  3 packets transmitted, 3 received, 0% packet loss, time 2035ms
+  rtt min/avg/max/mdev = 0.359/0.584/1.020/0.308 ms
+  mark@ws21:~$ 
+  ```
+- Specify MAC address at **ws11** by adding to *etc/netplan/00-installer-config.yaml*:
+`macaddress: 10:10:10:10:10:BA`, `dhcp4: true`:
+  ```
+  network:
+    ethernets:
+      enp0s3:
+        dhcp4: true
+      enp0s8:
+        match:
+          macaddress: 08:00:27:e2:34:ef 
+        set-name: eth0
+        macaddress: 10:10:10:10:10:BA
+        dhcp4: true
+        addresses: [10.10.0.2/18]
+        routes:
+          - to: default
+            via: 10.10.0.1
+    version: 2
+  ```
+  > Unfortunately, this does not work with our further intends and purposes, so we can make some changes in advance &mdash; change the macaddress in the settings of the VM to newly specified, as well as update the macaddress in netplan settings which we used to give our interface a custom name, and of course we should delete an assignment of it in the line that follows *set-name* option:
+  ```
+  network:
+    ethernets:
+      enp0s3:
+        dhcp4: true
+      enp0s8:
+        match:
+          macaddress: 10:10:10:10:10:BA
+        set-name: eth0
+        dhcp4: true
+        addresses: [10.10.0.2/18]
+        routes:
+          - to: default
+            via: 10.10.0.1
+    version: 2
+  ```
+- Сonfigure **r1** the same way as **r2**, but make the assignment of addresses strictly linked to the MAC-address (**ws11**) &mdash; add the following lines in a */etc/dhcp/dhcpd.conf*:
+  ```
+  subnet 10.10.0.0 netmask 255.255.192.0
+  {
+      range 10.10.0.1 10.10.63.254;
+      option routers 10.10.0.1;
+      option domain-name-servers 10.20.0.1;
+  }
+  
+  host ws11 {
+      hardware ethernet 10:10:10:10:10:BA;
+      fixed-address 10.10.42.42;
+  }
+  ```
+  > where *10.10.42.42* is just an arbitrary number
+- Reload **ws11** to apply changes and check that the DCHP server assigned it a new customly specified address:
+  ```
+  3: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+      inet 10.10.0.2/18 brd 10.10.63.255 scope global eth0
+      inet 10.10.42.42/18 brd 10.10.63.255 scope global secondary dynamic eth0
+  ```
+- Also we can request an ip address change fron DCHP server, for instance, request an ip address update on **ws21** with the command `sudo dhclient -r <desired_interface>` to release the lease and run `sudo dhclient <desired_interface>` to get the new one:
+  - before:
+    ```
+    mark@ws21:~$ ip -4 a | grep eth
+    3: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+        inet 10.20.0.2/26 brd 10.20.0.63 scope global dynamic eth0
+    ```
+  - after:
+    ```
+    mark@ws21:~$ sudo dhclient -r eth0
+    Killed old client process
+    mark@ws21:~$ sudo dhclient eth0
+    mark@ws21:~$ ip -4 a | grep eth
+    3: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+        inet 10.20.0.3/26 brd 10.20.0.63 scope global dynamic eth0
+    ```
+- Save dumps of virtual machine images
 
 ## Part 7. **NAT**
-
-And finally, the cherry on the cake, let me tell you about network address translation mechanism.
-
-**== Task ==**
+  And finally, the cherry on the cake, let me tell you about network address translation mechanism.
 
 *In this task you need to use virtual machines from Part 5*
 
-##### In */etc/apache2/ports.conf* file change the line `Listen 80` to `Listen 0.0.0.0:80`on ws22 and r1, i.e. make the Apache2 server public
-- Add a screenshot of the changed file to the report
-##### Start the Apache web server with `service apache2 start` command on ws22 and r1
-- Add screenshots with the call and the output of the used command to the report.
+- Install *apache2* with the command `sudo apt install apache2`
+- In */etc/apache2/ports.conf* file change the line `Listen 80` to `Listen 0.0.0.0:80` on **ws22** and **r1**, i.e. make the Apache2 server public
+- Start the Apache web server with `service apache2 start` command on **ws22** and **r1**
+- Add the following rules to the firewall, created similarly to the firewall from Part 4, on **r2**:
+  1. delete rules in the filter table - `iptables -F`
+  2. delete rules in the "NAT" table - `iptables -F -t nat`
+  3. drop all routed packets - `iptables --policy FORWARD DROP`
+  ```
+  #!/bin/sh
+  
+  # Delete rules in the filter table
+  iptables -F
+  # Delete rules in the "NAT" table
+  iptables -F -t nat
+  # Drop all routed packets
+  iptables -P FORWARD DROP
+  ```
+- Run the file as in **Part 4**
+- Check the connection between ws22 and r1 with the `ping` command:
+  ```
+  mark@r1:~$ ping -c3 ws22
+  PING ws22 (10.20.0.20) 56(84) bytes of data.
+  
+  --- ws22 ping statistics ---
+  3 packets transmitted, 0 received, 100% packet loss, time 2037ms
+  ```
+  *When running the file with these rules, ws22 should not ping from r1*
+- Add another rule to the file:
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4. allow routing of all **ICMP** protocol packets - `iptables -A FORWARD -p icmp -j ACCEPT`
+- Run the file as in **Part 4**
+- Check connection between ws22 and r1 with the `ping` command:
+  ```
+  mark@r1:~$ ping -c3 ws22
+  PING ws22 (10.20.0.20) 56(84) bytes of data.
+  64 bytes from ws22 (10.20.0.20): icmp_seq=1 ttl=63 time=2.11 ms
+  64 bytes from ws22 (10.20.0.20): icmp_seq=2 ttl=63 time=1.96 ms
+  64 bytes from ws22 (10.20.0.20): icmp_seq=3 ttl=63 time=1.96 ms
+  
+  --- ws22 ping statistics ---
+  3 packets transmitted, 3 received, 0% packet loss, time 2023ms
+  rtt min/avg/max/mdev = 1.961/2.012/2.114/0.071 ms
+  ```
+  *When running the file with these rules, **ws22** should ping from **r1***
+- Add two more rules to the file:
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5. enable **SNAT**, which is masquerade all local ip from the local network behind **r2** (as defined in **Part 5** - network *10.20.0.0*)
+  *Tip: it is worth thinking about routing internal packets as well as external packets with an established connection*
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6. enable **DNAT** on port **8080** of **r2** machine and add external network access to the Apache web server running on **ws22**
+  *Tip: be aware that when you will try to connect, there will be a new tcp connection for **ws22** and port **80**
+  The final firewall script looks like:
+```
+mark@r2:~$ cat /etc/firewall.sh 
+#!/bin/sh
 
-##### Add the following rules to the firewall, created similarly to the firewall from Part 4, on r2:
-##### 1) delete rules in the filter table - `iptables -F`
-##### 2) delete rules in the "NAT" table - `iptables -F -t nat`
-##### 3) drop all routed packets - `iptables --policy FORWARD DROP`
-##### Run the file as in Part 4
-##### Check the connection between ws22 and r1 with the `ping` command
-*When running the file with these rules, ws22 should not ping from r1*
-- Add screenshots with the call and the output of the used command to the report.
-##### Add another rule to the file:
-##### 4) allow routing of all **ICMP** protocol packets
-##### Run the file as in Part 4
-##### Check connection between ws22 and r1 with the `ping` command
-*When running the file with these rules, ws22 should ping from r1*
-- Add screenshots with the call and the output of the used command to the report.
-##### Add two more rules to the file:
-##### 5) enable **SNAT**, which is masquerade all local ip from the local network behind r2 (as defined in Part 5 - network 10.20.0.0)
-*Tip: it is worth thinking about routing internal packets as well as external packets with an established connection*
-##### 6) enable **DNAT** on port 8080 of r2 machine and add external network access to the Apache web server running on ws22
-*Tip: be aware that when you will try to connect, there will be a new tcp connection for ws22 and port 80
-- Add a screenshot of the changed file to the report
-##### Run the file as in Part 4
-*Before testing it is recommended to disable the **NAT** network interface in VirtualBox (its presence can be checked with `ip a` command), if it is enabled*
-##### Check the TCP connection for **SNAT** by connecting from ws22 to the Apache server on r1 with the `telnet [address] [port]` command
-##### Check the TCP connection for **DNAT** by connecting from r1 to the Apache server on ws22 with the `telnet` command (address r2 and port 8080)
-- Add screenshots with the call and the output of the used commands to the report.
+# Delete rules in the filter table
+iptables -F
+# Delete rules in the "NAT" table
+iptables -F -t nat
 
+# Drop all routed packets
+iptables -P FORWARD DROP
+# Allows all ICMP forwarded packets
+iptables -A FORWARD -p icmp -j ACCEPT 
+# Add external network access to the Apache web server running in ws22
+iptables -A FORWARD -i eth0 -j ACCEPT
+iptables -A FORWARD -o eth0 -j ACCEPT
+
+# Enable SNAT to masquerade all local IPs
+iptables -t nat -A POSTROUTING -o eth0 -p tcp -s 10.20.0.0/26 -j SNAT --to-source      10.100.0.12
+# Enable DNAT on port 8080 of r2
+iptables -t nat -A PREROUTING  -i eth0 -p tcp --dport 8080    -j DNAT --to-destination 10.20.0.20:80
+```
+- Run the file as in **Part 4**
+
+> *Before testing it is recommended to disable the **NAT** network interface in VirtualBox (its presence can be checked with `ip a` command), if it is enabled*
+
+- Check the TCP connection for **SNAT** by connecting from **ws22** to the Apache server on **r1** with the `telnet [address] [port]` command:
+  ```
+  mark@ws22:~$ telnet r1 80
+  Trying 10.100.0.11...
+  Connected to r1.
+  Escape character is '^]'.
+  ```
+- Check the TCP connection for **DNAT** by connecting from **r1** to the Apache server on **ws22** with the `telnet` command (address **r2** and port **8080**):
+  ```
+  mark@r1:~$ telnet ws22 8080
+  Trying 10.20.0.20...
+  Connected to ws22.
+  Escape character is '^]'.
+  ```
 ##### Save dumps of virtual machine images
-**p.s. Do not upload dumps to git under any circumstances!**
 
 ## Part 8. Introduction to **SSH Tunnels**
 If you need to have an access to a closed network to get to a project &mdash; **SSH Tunnel** &mdash; this is what you need.
 *In this task you need to use virtual machines from Part 5*
-##### Run a firewall on r2 with the rules from Part 7
-##### Start the **Apapche** web server on ws22 on localhost only (i.e. in */etc/apache2/ports.conf* file change the line `Listen 80` to `Listen localhost:80`)
-##### Use *Local TCP forwarding* from ws21 to ws22 to access the web server on ws22 from ws21
-##### Use *Remote TCP forwarding* from ws11 to ws22 to access the web server on ws22 from ws11
-##### To check if the connection worked in both of the previous steps, go to a second terminal (e.g. with the Alt + F2) and run the `telnet 127.0.0.1 [local port]` command.
-- In the report, describe the commands that you need for doing these 4 steps and add screenshots of their call and output.
+- Run a firewall on r2 with the rules from Part 7
+- Start the **apache** web server on ws22 on localhost only (i.e. in */etc/apache2/ports.conf* file change the line `Listen 80` to `Listen localhost:80`). We will just restart it after editing the config file:
+  ```
+  mark@ws22:~$ sudo service apache2 restart
+  mark@ws22:~$ service apache2 status
+  ● apache2.service - The Apache HTTP Server
+       Loaded: loaded (/lib/systemd/system/apache2.service; enabled; vendor preset: enabled)
+       Active: active (running) since Sat 2023-07-15 19:06:58 +07; 22s ago
+         Docs: https://httpd.apache.org/docs/2.4/
+      Process: 6138 ExecStart=/usr/sbin/apachectl start (code=exited, status=0/SUCCESS)
+     Main PID: 6163 (apache2)
+        Tasks: 55 (limit: 4595)
+       Memory: 5.3M
+       CGroup: /system.slice/apache2.service
+               ├─6163 /usr/sbin/apache2 -k start
+               ├─6165 /usr/sbin/apache2 -k start
+               └─6166 /usr/sbin/apache2 -k start
+  
+  Jul 15 19:06:57 ws22 systemd[1]: Starting The Apache HTTP Server...
+  Jul 15 19:06:58 ws22 apachectl[6161]: AH00558: apache2: Could not reliably determine the server's fully qualifie>
+  Jul 15 19:06:58 ws22 systemd[1]: Started The Apache HTTP Server.
+  ```
+- Use *Local TCP forwarding* from **ws21** to **ws22** to access the web server on **ws22** from **ws21** with the command:
+  `ssh -L <port>:<remote_socket> <remote_addr>`
+  Which specifies that connections to the given TCP port or Unix socket on the local (client) host are to be forwarded to the given host and port, or Unix socket, on the remote side.
+  We can see that everything works:
+  ```
+  mark@ws21:~$ ssh -L 8080:localhost:80 ws22
+  mark@ws22's password: 
+  
+  mark@ws21:~$ man ssh
+  mark@ws21:~$ ssh -L 8080:localhost:80 ws22
+  mark@ws22's password: 
+  Welcome to Ubuntu 20.04.6 LTS (GNU/Linux 5.4.0-153-generic x86_64)
+  ---x---
+  ```
+  \*second **ws21** terminal:*
+  ```
+  mark@ws21:~$ telnet localhost 8080
+  Trying 127.0.0.1...
+  Connected to 127.0.0.1.
+  Escape character is '^]'.
+  !
+  HTTP/1.1 400 Bad Request
+  Date: Sat, 15 Jul 2023 12:56:44 GMT
+  Server: Apache/2.4.41 (Ubuntu)
+  ```
+Another popular (but rather inverse) scenario is when you want to momentarily expose a local service to the outside world.
+- Use *Remote TCP forwarding* from **ws11** to **ws22** to access the web server on **ws22** from **ws11** with the command:
+  `ssh -R <remote_port>:<local_socket> <local_addr>`
+  Specifies that connections to the given TCP port or Unix socket on the remote (server) host are to be forwarded to the local side.
 
+  ```
+  mark@ws22:~$ ssh -R 1737:localhost:80 ws11
+  The authenticity of host 'ws11 (10.10.0.2)' can't be established.
+  ECDSA key fingerprint is SHA256:QxJP1hRkdNVkubhbMhS/kpbKOvaetDVL9lUS70cZfro.
+  Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+  Warning: Permanently added 'ws11,10.10.0.2' (ECDSA) to the list of known hosts.
+  mark@ws11's password: 
+  Welcome to Ubuntu 20.04.6 LTS (GNU/Linux 5.4.0-153-generic x86_64)
+  ---x---
+  ```
+  \*second **ws11** terminal*:
+  ```
+  mark@ws11:~$ telnet localhost 1737
+  Trying 127.0.0.1...
+  Connected to localhost.
+  Escape character is '^]'.
+  !
+  HTTP/1.1 400 Bad Request
+  Date: Sat, 15 Jul 2023 13:29:20 GMT
+  Server: Apache/2.4.41 (Ubuntu)
+  ```
 ##### Save dumps of virtual machine images
-**p.s. Do not upload dumps to git under any circumstances!**
