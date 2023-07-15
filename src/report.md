@@ -439,7 +439,7 @@ where **p** stands for *private* and **sh** for *shared*
 #### 5.1. Configuration of machine addresses
 - Set up the machine configurations in *etc/netplan/00-installer-config.yaml* according to the network in the picture.
   - ws11:  
-    ```
+    ```yaml
     network:
       version: 2
       ethernets:
@@ -452,7 +452,7 @@ where **p** stands for *private* and **sh** for *shared*
           addresses: [10.10.0.2/18]
     ```
   - ws21:
-    ```
+    ```yaml
     network:
       version: 2 
       ethernets:
@@ -465,7 +465,7 @@ where **p** stands for *private* and **sh** for *shared*
           addresses: [10.20.0.20/26]
     ```
   - ws22:
-    ```
+    ```yaml
     network:
       version: 2
       ethernets:
@@ -478,7 +478,7 @@ where **p** stands for *private* and **sh** for *shared*
           addresses: [10.20.0.10/26]
     ```
   - r1:
-    ```txt
+    ```yaml
     network:
       version: 2
       ethernets:
@@ -496,7 +496,7 @@ where **p** stands for *private* and **sh** for *shared*
           addresses: [10.100.0.11/16]
     ```
   - r2:
-    ```
+    ```yaml
     network:
       version: 2
       ethernets:
@@ -596,7 +596,7 @@ where **p** stands for *private* and **sh** for *shared*
 #### 5.3. Default route configuration
 - Configure the default route (gateway) for the workstations. To do this, add `default` before the router's IP to the interface at the end of the configuration file:
   - ws11:
-    ```
+    ```yaml
     ---x---
           routes:
             - to:  default
