@@ -23,6 +23,12 @@ scrape_sysinfo | awk -v f1="${font_col[$column1_font_color]}"\
                      -v b2="${back_col[$column2_background]}"\
                      -v fd="${font_col[0]}" \
                      -v bd="${back_col[0]}" \
-                     '{printf("%s%s%s%s%s = %s%s%s%s%s\n", f1,b1,$1,fd,bd, f2,b2,$3,fd,bd);}'
+                     '
+                      {
+                        printf("%s%s%s%s%s = ", f1,b1,$1,fd,bd);
+                        sub($1 OFS, ""); sub($1 OFS, "");
+                        printf("%s%s%s%s%s\n",  f2,b2,$0,fd,bd);
+                      }
+                     '
 echo
 print_conf_info ${parameters[*]}
