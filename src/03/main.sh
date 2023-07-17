@@ -16,8 +16,10 @@ scrape_sysinfo | awk -v f1="${font_col[$1]}"\
                      -v b2="${back_col[$4]}"\
                      -v fd="${font_col[0]}" \
                      -v bd="${back_col[0]}" \
-                     '{
+                     '
+                      {
                         printf("%s%s%s%s%s = ", f1,b1,$1,fd,bd);
                         sub($1 OFS, ""); sub($1 OFS, "");
                         printf("%s%s%s%s%s\n",  f2,b2,$0,fd,bd);
-                      }'
+                      }
+                     '
