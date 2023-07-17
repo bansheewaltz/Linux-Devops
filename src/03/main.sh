@@ -19,7 +19,7 @@ scrape_sysinfo | awk -v f1="${font_col[$1]}"\
                      '
                       {
                         printf("%s%s%s%s%s = ", f1,b1,$1,fd,bd);
-                        sub($1 OFS, ""); sub($1 OFS, "");
-                        printf("%s%s%s%s%s\n",  f2,b2,$0,fd,bd);
+                        sub($1, ""); sub(" = ", "");
+                        printf("%s%s%s%s%s \n", f2,b2,$0,fd,bd);
                       }
                      '
