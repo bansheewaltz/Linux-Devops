@@ -1,21 +1,19 @@
 #!/bin/bash
 source scrape_sysinfo.sh
+source parameters_validation.sh
+source colours_list.sh
 
-# Validate the format of command-line arguments.
-for parameter in "$@"
-do
-	if ! [[ "$parameter" =~ ^[1-6]$ ]]; then
-		echo "Error: the script command-line arguments should be in the range [1-6]"
-		exit 1
-	fi
-done
-# Validate the number of command-line arguments.
-if [ "$#" -ne 4 ]; then
-	echo "Error: the script needs 4 parameters to run. Entered $#"
-	exit 1
-fi
-# Check that there is no coincidence between foreground and background values
-if [[ $1 == $2 || $3 == $4 ]]; then
-  echo "Error: Colours of the foreground and the background should not coincise"
-  echo "You can try again, but make sure that the first and the third values do not match the second and the fourth respectively"
-fi
+
+parameters=$@
+
+validate_input_format       ${parameters[*]}
+validate_args_count         ${parameters[*]}
+check_no_colour_coincidence ${parameters[*]}
+
+scrape_sysinfo | awk -v f1="${font_col[$1]}"\
+                     -v b1="${back_col[$2]}"\
+                     -v f2="${font_col[$3]}"\
+                     -v b2="${back_col[$4]}"\
+                     -v fd="${font_col[0]}" \
+                     -v bd="${back_col[0]}" \
+                     '{printf("%s%s%s%s%s = %s%s%s%s%s\n", f1,b1,$1,fd,bd, f2,b2,$3,fd,bd);}'

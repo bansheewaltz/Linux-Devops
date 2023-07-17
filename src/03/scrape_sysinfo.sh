@@ -1,5 +1,3 @@
-#!/bin/bash
-
 scrape_sysinfo(){
   echo "HOSTNAME = $(hostname)"
   echo "TIMEZONE = $(date +"$(cat /etc/timezone) UTC %Z")"
