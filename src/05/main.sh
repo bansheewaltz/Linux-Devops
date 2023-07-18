@@ -37,7 +37,7 @@ echo "Number of:"
       echo "Archive files = $(sudo find "$path" -type f -exec file {} + | grep -E "compressed|archive"| wc -l)"
       echo "Symbolic links = $(sudo find "$path" -type l -executable | wc -l)"
 echo "TOP 10 files of maximum size arranged in descending order (path, size and type):"
-      sudo find "$path" -type f -exec du -hS {} + | sort -hr | nl | head | awk '{printf "%d - %s, %sB, ", $1, $3, $2; sub(/.*\./, "", $3); print $3}'
+      sudo find "$path" -type f -exec du -hS {} + | sort -hr | nl | head | awk '{printf "%d - %s, %sB, ", $1, $3, $2; if ($3~/\./) {sub(/.*\./, "", $3); print $3} else {printf "exe \n"}}'
 echo "TOP 10 executable files of the maximum size arranged in descending order (path, size and MD5 hash of file) "
       sudo find "$path" -type f -executable -exec du -sh {} + | sort -hr | nl | head | awk '{cmd = "md5sum " $3; cmd|getline result; printf "%d - %s, %sB, %s\n", $1, $3, $2, result}' | awk '{print $1,$2,$3,$4,$5}'
 time_end=$(date +%s.%N)
