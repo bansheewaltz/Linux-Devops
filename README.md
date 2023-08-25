@@ -26,7 +26,7 @@ The russian version of the task can be found in the repository.
 
 ## Chapter I
 
-![linux_monitoringv2.0](misc/images/linux_monitoringv2.0.png)
+![linux_monitoringv2.0](task/misc/images/linux_monitoringv2.0.png)
 
 Planet Earth, USA, California, nowadays.
 
