@@ -8,8 +8,26 @@ function terminate {
   exit 1
 }
 
+function print_usage {
+cat << EOF
+Usage:
+  Parameter 1 is the absolute path.
+  Parameter 2 is the number of subfolders.
+  Parameter 3 is a list of English alphabet letters used in folder
+              names (no more than 7 characters).
+  Parameter 4 is the number of files in each created folder.
+  Parameter 5 - the list of English alphabet letters used in the file
+              name and extension (no more than 7 characters for the
+              name, no more than 3 characters for the extension).
+  Parameter 6 - file size (in kilobytes, but not more than 100).
+EOF
+}
+
 function validate_input {
   # argument count
+  if [ $arg_count -eq 0 ]; then
+    print_usage
+    exit 1; fi
   if [ $arg_count -ne 6 ]; then
     terminate "The script takes exactly 6 arguments as input"; fi
   
