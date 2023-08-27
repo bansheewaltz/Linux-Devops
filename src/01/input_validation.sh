@@ -9,7 +9,7 @@ function terminate {
 }
 
 function print_usage {
-cat << EOF
+  cat << EOF
 Usage:
   Parameter 1 is the absolute path.
   Parameter 2 is the number of subfolders.
@@ -61,20 +61,20 @@ function validate_input {
                and the value should be at least 1"; fi 
 
   # fifth parameter
-  regex_file_name='^[A-Za-z]{1,7}\.{1,1}[A-Za-z]{1,3}$'
+  regex_file_name='^[A-Za-z]{1,7}\.[A-Za-z]{1,3}$'
   if [[ ! $file_letters =~ $regex_file_name ]]; then
-    echo "Incorrect input in the fifth parameter!"
-    terminate "A file\`s name must contain only A-z, a-z letters and you can \
-               use not more 7 letters for a name and not more 3 letters for \
+    terminate "The fifth parameter, a file\`s name, must contain only A-z, \
+               a-z letters and you can use not more 7 letters for a name and \
+               not more 3 letters for \
                an extension. Letters in a name and in an extension can\`t \
                repeat. Example: sdf.ex"; fi
 
   # sixth parameter
-  regex_file_size='^[0-9]+kb|Kb|KB|kB$'
+  regex_file_size='^0*[1-9][0-9]*[kK][bB]$'
   if [[ ! $file_size =~ $regex_file_size ]]; then
-    terminate "Input error in the sixth parameter! Please, write size of \
-               files in kb. Example: 123kb."; fi
+    terminate "The sixth parameter, the file size, must be in kb and has \
+               at least 1 as a value. Example: 23kb."; fi
   file_size=$(echo $file_size | sed 's/'[kK][bB]'//')
   if [ $file_size -gt 100 ]; then
-    terminate "Input error in sixth parameter! Size can\`t be over 100kb"; fi
+    terminate "The sixth parameter, the file size, can\`t be over 100kb"; fi
 }
