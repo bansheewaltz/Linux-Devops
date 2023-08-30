@@ -22,7 +22,7 @@ The russian version of the task can be found in the repository.
 
 ## Chapter I
 
-![simple_docker](misc/images/simple_docker.png)
+![simple_docker](task/misc/images/simple_docker.png)
 
 Planet Earth, Atlantic Ocean, Her Majesty's Ship "Hood", heading to London, UK, nowadays.
 
