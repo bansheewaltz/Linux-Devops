@@ -6,25 +6,6 @@
 5. [Dockle](#part-5-dockle)
 6. [Basic Docker Compose](#part-6-basic-docker-compose)
 
-As a result of the work you should provide a report on the first two tasks. Each part of the task describe what should be added to the report once it has been completed. This can be answers to questions, screenshots, etc.
-
-As a result of the third task you should provide source files for running the web server.
-
-As a result of the fourth and fifth tasks you should provide dockerfiles.
-
-As a result of the sixth task you should provide a *docker-compose.yml* file and the dockerfiles needed to run it (if not provided earlier).
-
-- A report with a .md extension must be uploaded to the repository, in the src folder.
-- All parts of the task should be highlighted in the report as level 2 headings.
-- Within one part of the task, everything that is added to the report must be in the form of the list.
-- Each screenshot in the report must be briefly captioned (what’s in the screenshot).
-- All screenshots must be cropped so that only the relevant part of the screen is shown.
-- It’s allowed to have several task points shown in one screenshot, but they must all be described in the caption.
-- Source files for running the web server from the third task should be uploaded to the repository, in the src/server folder.
-- Dockerfiles from the fourth and fifth tasks should be uploaded to the repository, in the src folder.
-- *docker-compose.yml* from the sixth task should be uploaded to the repository, in the src folder.
-- Be prepared to demonstrate your work if necessary.
-
 ## Part 1. Ready-made docker
 
 - Take the official docker image from **nginx** and download it using `docker pull`:
