@@ -234,11 +234,14 @@ Once you've written the image, it's never a bad idea to check it for security.
 Why not try experimenting with deploying a project consisting of several docker images at once?
 
 - Write a *docker-compose.yml* file, using which:
-  1. Start the docker container from [Part 5](#part-5-dockle) _(it must work on local network, i.e., you don't need to use **EXPOSE** instruction and map ports to local machine)_:
+  1. Start the docker container from [Part 5](#part-5-dockle) _(it must work on local network, i.e., you don't need to use **EXPOSE** instruction and map ports to local machine)_
+      > Dockerfile from the previous part with deleted entry of nginx.conf copying:
+      > ![Alt text](screenshots/6.6.png)
   2. Start the docker container with **nginx** which will proxy all requests from port 8080 to port 81 of the first container:
-  ![docker-compose.yml](screenshots/6.1.png)
+      > nginx configuration file:
+      > ![nginx.conf](screenshots/6.2.png)
 - Map port 8080 of the second container to port 80 of the local machine:
-  ![nginx.conf](screenshots/6.2.png)
+  ![docker-compose.yml](screenshots/6.1.png)
 - Stop all running containers:
   ![all containers are stopped](screenshots/6.3.png)
 - Build and run the project with the `docker-compose build` and `docker-compose up` commands:
