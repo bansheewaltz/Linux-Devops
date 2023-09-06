@@ -8,6 +8,8 @@ declare -x dir_count=$2
 declare -x dir_letters=$3
 declare -x file_count=$4
 declare -x file_letters=$5
+declare -x bn_letters=${file_letters%.*}
+declare -x ext_letters=${file_letters#*.}
 declare -x file_size_kib=$6
 
 validate_input
@@ -21,11 +23,9 @@ MIN_EXT_LEN=2
 dir_alph=($(echo $dir_letters | grep -o .))
 dir_alph_len=${#dir_letters}
 # file basename
-bn_letters=${file_letters%.*}
 bn_alph=($(echo $bn_letters | grep -o .))
 bn_alph_len=${#bn_letters}
 # file extension
-ext_letters=${file_letters#*.}
 ext_alph=($(echo $ext_letters | grep -o .))
 ext_alph_len=${#ext_letters}
 
