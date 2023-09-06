@@ -1,5 +1,3 @@
-#!/bin/bash
-
 function is_in_docker {
   if [ -f /.dockerenv ]; then
       return 0
