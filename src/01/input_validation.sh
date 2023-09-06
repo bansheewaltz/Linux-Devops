@@ -13,19 +13,20 @@ normal=$(tput sgr0)
 tabs 6
 function print_usage {
   echo "${bold}DESCRIPTION${normal}"
-  echo -e '\tThe script generates folders at the specified path with files' \
-            'inside them. The counts of folders and files as well as' \
-            'characters used should be specified.'
+  echo -e "\tThe script generates folders at the specified path with files\n" \
+           "\tinside them. The counts of folders and files as well as\n" \
+           "\tcharacters used should be specified."
   echo
   echo "${bold}USAGE${normal}"
   echo -e '\tParameter 1 - the absolute path.'
   echo -e '\tParameter 2 - the number of subfolders.'
-  echo -e '\tParameter 3 - the list of English alphabet letters used in folder' \
-            'names (no more than 7 characters).'
+  echo -e '\tParameter 3 - the list of English alphabet letters used in\n' \
+          '\t              folder names (no more than 7 characters).'
   echo -e '\tParameter 4 - the number of files in each created folder.'
-  echo -e '\tParameter 5 - the list of English alphabet letters used in the' \
-            'file name and extension (no more than 7 characters for the' \
-            'name, no more than 3 characters for the extension).'
+  echo -e '\tParameter 5 - the list of English alphabet letters used in the\n' \
+          '\t              file name and extension (no more than 7\n' \
+          '\t              characters for the name, no more than 3 for the \n' \
+          '\t              extension).'
   echo -e '\tParameter 6 - the file size (in kilobytes, but not more than 100).'
   echo
   echo "${bold}EXAMPLE${normal}"
