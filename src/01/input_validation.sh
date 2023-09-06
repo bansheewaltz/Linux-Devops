@@ -8,19 +8,27 @@ function terminate {
   exit 1
 }
 
+bold=$(tput bold)
+normal=$(tput sgr0)
+tabs 6
 function print_usage {
-  echo Usage:
-  echo -e '\tParameter 1 is the absolute path.'
-  echo -e '\tParameter 2 is the number of subfolders.'
-  echo -e '\tParameter 3 is a list of English alphabet letters used in folder' \
+  echo "${bold}DESCRIPTION${normal}"
+  echo -e '\tThe script generates folders at the specified path with files' \
+            'inside them. The counts of folders and files as well as' \
+            'characters used should be specified.'
+  echo
+  echo "${bold}USAGE${normal}"
+  echo -e '\tParameter 1 - the absolute path.'
+  echo -e '\tParameter 2 - the number of subfolders.'
+  echo -e '\tParameter 3 - the list of English alphabet letters used in folder' \
             'names (no more than 7 characters).'
-  echo -e '\tParameter 4 is the number of files in each created folder.'
-  echo -e '\tParameter 5 - the list of English alphabet letters used in the ' \
+  echo -e '\tParameter 4 - the number of files in each created folder.'
+  echo -e '\tParameter 5 - the list of English alphabet letters used in the' \
             'file name and extension (no more than 7 characters for the' \
             'name, no more than 3 characters for the extension).'
-  echo -e '\tParameter 6 - file size (in kilobytes, but not more than 100).'
+  echo -e '\tParameter 6 - the file size (in kilobytes, but not more than 100).'
   echo
-  echo Example:
+  echo "${bold}EXAMPLE${normal}"
   echo -e '\tmain.sh /home/01/test 5 ab 13 cd.ef 3kb'
 }
 
@@ -28,7 +36,7 @@ function validate_input {
   # argument count
   if [ $arg_count -eq 0 ]; then
     print_usage
-    exit 1; fi
+    exit 0; fi
   if [ $arg_count -ne 6 ]; then
     terminate "The script takes exactly 6 arguments as input"; fi
   
