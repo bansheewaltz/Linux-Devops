@@ -1,5 +1,5 @@
-function echoerr { 
-  >&2 echo $@
+function echoerr {
+  >&2 echo "$@"
 }
 
 function terminate {
@@ -9,18 +9,19 @@ function terminate {
 }
 
 function print_usage {
-  cat << EOF
-Usage:
-  Parameter 1 is the absolute path.
-  Parameter 2 is the number of subfolders.
-  Parameter 3 is a list of English alphabet letters used in folder
-              names (no more than 7 characters).
-  Parameter 4 is the number of files in each created folder.
-  Parameter 5 - the list of English alphabet letters used in the file
-              name and extension (no more than 7 characters for the
-              name, no more than 3 characters for the extension).
-  Parameter 6 - file size (in kilobytes, but not more than 100).
-EOF
+  echo Usage:
+  echo -e '\tParameter 1 is the absolute path.'
+  echo -e '\tParameter 2 is the number of subfolders.'
+  echo -e '\tParameter 3 is a list of English alphabet letters used in folder' \
+            'names (no more than 7 characters).'
+  echo -e '\tParameter 4 is the number of files in each created folder.'
+  echo -e '\tParameter 5 - the list of English alphabet letters used in the ' \
+            'file name and extension (no more than 7 characters for the' \
+            'name, no more than 3 characters for the extension).'
+  echo -e '\tParameter 6 - file size (in kilobytes, but not more than 100).'
+  echo
+  echo Example:
+  echo -e '\tmain.sh /home/01/test 5 ab 13 cd.ef 3kb'
 }
 
 function validate_input {
@@ -44,7 +45,7 @@ function validate_input {
   
   # second parameter
   regex_subdir_count='^0*[1-9][0-9]*$'
-  if [[ ! $subdir_count =~ $regex_subdir_count ]]; then
+  if [[ ! $dir_count =~ $regex_subdir_count ]]; then
     terminate "The second parameter, the folder count, accepts only numbers \
                and the value should be at least 1"; fi  
 
@@ -70,11 +71,11 @@ function validate_input {
                repeat. Example: sdf.ex"; fi
 
   # sixth parameter
-  regex_file_size='^0*[1-9][0-9]*[kK][bB]$'
-  if [[ ! $file_size =~ $regex_file_size ]]; then
+  regex_file_size_kib='^0*[1-9][0-9]*[kK][bB]$'
+  if [[ ! $file_size_kib =~ $regex_file_size_kib ]]; then
     terminate "The sixth parameter, the file size, must be in kb and has \
                at least 1 as a value. Example: 23kb."; fi
-  file_size=$(echo $file_size | sed 's/'[kK][bB]'//')
-  if [ $file_size -gt 100 ]; then
+  file_size_kib=$(echo $file_size_kib | sed 's/'[kK][bB]'//')
+  if [ $file_size_kib -gt 100 ]; then
     terminate "The sixth parameter, the file size, can\`t be over 100kb"; fi
 }
