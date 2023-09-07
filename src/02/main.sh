@@ -1,7 +1,7 @@
 #!/bin/bash
-source utils.sh
 source input_validation.sh
 source filefolder_generation.sh
+source utils.sh
 
 declare -x arg_count=$#
 declare -x dir_letters=$1
@@ -10,9 +10,10 @@ declare -x bn_letters=${file_letters%.*}
 declare -x ext_letters=${file_letters#*.}
 declare -x file_size_mib=$3
 
+
 validate_input
 
-### PARAMETERS ###
+### SCRIPT PARAMETERS ###
 memory_limit_gib=1
 min_dname_len=4
 min_fname_len=4
@@ -21,8 +22,10 @@ dir_count_min=1
 dir_count_max=10
 file_count_min=1
 file_count_max=5
-### ---------- ###
+logfile="logfile.$(date +'%Y-%m-%d').log"
+### ----------------- ###
 
+### CONSTANTS ###
 # directory name
 dir_alph=($(echo $dir_letters | grep -o .))
 dir_alph_len=${#dir_letters}
@@ -42,7 +45,7 @@ if ((min_ext_len < ext_alph_len)); then
   min_ext_len=ext_alph_len; fi
 
 printf -v date '%(%d%m%y)T'
-logfile="logfile.$(date +'%Y-%m-%d').log"
+### --------- ###
 
 
 paths=($(find / -type d))
