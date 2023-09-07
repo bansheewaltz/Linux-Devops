@@ -61,7 +61,6 @@ function next_name() {
 function generate_filefolder() {
   path=$1
   dir_count=$2
-  file_count=$3
   for ((dname_len = min_dname_len, dcount = 0; ; dname_len++)); do
     declare -a dname_id
     # custom number system with base n of len k; + older "bit" as a stop flag
@@ -74,6 +73,7 @@ function generate_filefolder() {
       fulldname="${path}/${dname}_${date}"
       if ! mkdir -p "$fulldname" 2> /dev/null; then
         return 0; fi
+      file_count=$(rand_int_in_range $file_count_min $file_count_max)
   ### FILE NAME GENERATION
       for ((bname_len = min_fname_len, fcount = 0; ; bname_len++)); do
         bname_id=()

@@ -1,10 +1,6 @@
 #!/bin/bash
-
-# shellcheck source=utils.sh
 source utils.sh
-# shellcheck source=input_validation.sh
 source input_validation.sh
-# shellcheck source=file_folder_generation.sh
 source filefolder_generation.sh
 
 declare -x arg_count=$#
@@ -16,6 +12,7 @@ declare -x file_size_mib=$3
 
 validate_input
 
+### PARAMETERS ###
 memory_limit_gib=1
 min_dname_len=4
 min_fname_len=4
@@ -24,6 +21,7 @@ dir_count_min=1
 dir_count_max=10
 file_count_min=1
 file_count_max=5
+### ---------- ###
 
 # directory name
 dir_alph=($(echo $dir_letters | grep -o .))
@@ -46,19 +44,23 @@ if ((min_ext_len < ext_alph_len)); then
 printf -v date '%(%d%m%y)T'
 logfile="logfile.$(date +'%Y-%m-%d').log"
 
-for path in $(find / -type d) ; do
+
+paths=($(find / -type d))
+while [ ${#paths[@]} -ne 0 ] ; do
+    rand=$((RANDOM % ${#paths[@]}))
+    path=${paths[rand]}
+    arr_remove_element paths $path
+
     if [ -L "${path%/}" ]; then  # symbolic link check
       continue; fi
     if [[ ! -w $path ]]; then   # writability check
       continue; fi
     if [[ $path =~ (bin|sbin) ]]; then  # forbidden dirs check
       continue; fi
-    if (( RANDOM % 2 == 0)); then  # random skip condition
+    if (( RANDOM % 2 == 0 )); then  # random skip condition
       continue; fi
     
-    dir_count=$(rand_int_in_range $dir_count_min $dir_count_max)
-    file_count=$(rand_int_in_range $file_count_min $file_count_max)
-    
-    if ! generate_filefolder $path $dir_count $file_count; then
+    dir_count=$(rand_int_in_range $dir_count_min $dir_count_max)    
+    if ! generate_filefolder $path $dir_count; then
       break; fi
 done
