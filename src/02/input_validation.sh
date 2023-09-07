@@ -67,11 +67,11 @@ function validate_input {
                repetition of characters"; fi
 
   # third parameter
-  re_file_size_kib='^0*[1-9][0-9]*[kK][bB]$'
-  if [[ ! $file_size_kib =~ $re_file_size_kib ]]; then
+  re_file_size_mib='^0*[1-9][0-9]*[mM][bB]$'
+  if [[ ! $file_size_mib =~ $re_file_size_mib ]]; then
     terminate "The third parameter, the file size, must be in mb and has \
                at least 1 as a value. Example: 23mb."; fi
-  file_size_kib=$(echo $file_size_kib | sed 's/'[mM][bB]'//')
-  if [ $file_size_kib -gt 100 ]; then
+  file_size_mib=$(echo $file_size_mib | sed 's/'[mM][bB]'//')
+  if [ $file_size_mib -gt 100 ]; then
     terminate "The third parameter, the file size, can\`t be over 100mb"; fi
 }
