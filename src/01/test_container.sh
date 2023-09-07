@@ -1,5 +1,7 @@
 #!/bin/bash
 
+mkdir test
+
 docker run -it --rm \
            -v "$PWD"/:/home/ \
            -w /home \
@@ -7,4 +9,5 @@ docker run -it --rm \
            --name monitoring2_dondarri \
            ubuntu
 
-rm -rf $(find . -name "logfile*")
+rm -f logfile*
+rm -rf test
