@@ -30,7 +30,7 @@ function print_usage {
   echo -e '\tParameter 3 - the file size (in Megabytes, but not more than 100).'
   echo
   echo "${bold}EXAMPLE${normal}"
-  echo -e '\tmain.sh az az.az 3Mb'
+  echo -e '\tmain.sh ab cd.ef 3Mb'
 }
 
 function validate_input {
