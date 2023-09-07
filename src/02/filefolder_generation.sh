@@ -89,7 +89,7 @@ function generate_filefolder() {
             for ((j = 0; j < ename_len-ext_alph_len+1; j++)); do 
               ename_id[j]=0; done
             while true; do
-              if ! next_name ename_id bn_alph; then
+              if ! next_name ename_id ext_alph; then
                 break; fi
               ename=$name
   ### LOGGING
