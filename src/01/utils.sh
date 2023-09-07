@@ -9,7 +9,7 @@ function is_in_docker {
 function get_free_space_B {
   if is_in_docker; then
     memory_max=$(cat /sys/fs/cgroup/memory.max)
-    memory_cur=$(cat /sys/fs/cgroup/memory.current)
+    memory_cur=$(du -s --block-size=1 / 2> /dev/null | cut -f1)
     # memory_free=$(awk -v a="$memory_max" -v b="$memory_cur" 'BEGIN { print (a - b)/1024 }') #kib
     memory_free=$((memory_max - memory_cur))
     echo $memory_free
