@@ -6,3 +6,5 @@ docker run -it --rm \
            -m 1112m \
            --name monitoring2_dondarri \
            ubuntu
+
+rm -rf $(find . -name "logfile*")
