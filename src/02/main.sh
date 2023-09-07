@@ -12,6 +12,7 @@ declare -x file_size_mib=$3
 
 
 validate_input
+SECONDS=0  # to time script execution
 
 ### SCRIPT PARAMETERS ###
 memory_limit_gib=1
@@ -67,3 +68,5 @@ while [ ${#paths[@]} -ne 0 ] ; do
     if ! generate_filefolder $path $dir_count; then
       break; fi
 done
+
+echo "Script execution time: $(($SECONDS/3600))h:$((($SECONDS/60)%60))m:$(($SECONDS%60))s"
