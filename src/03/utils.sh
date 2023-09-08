@@ -30,3 +30,18 @@ function format_bytes_output() {
   #   }
   #   {sub(/^[0-9]+/, human($1)); print}'
 }
+
+function cleanup() {
+  files=$@
+  filefolders=$(echo "$files" | xargs dirname | uniq)
+  
+  space_before=$(get_free_space_B)
+  echo "$filefolders" | xargs rm -rf 2>/dev/null
+  space_after=$(get_free_space_B)
+  space_cleaned=$((space_after - space_before))
+  
+  echo
+  echo $(echo "$filefolders" | wc -l) folders, total \
+       $(echo "$files" | wc -l) files removed, \
+       $(format_bytes_output $space_cleaned) of memory freed
+}
