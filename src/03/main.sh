@@ -36,13 +36,8 @@ if [ "$method" -eq 1 ]; then
       exit 0; fi
   done
 
-  space_before=$(get_free_space_B)
-  awk '{print $1}' $logfile | xargs rm 2>/dev/null
-  space_after=$(get_free_space_B)
-  space_cleaned=$((space_after - space_before))
-  echo
-  echo $(cat $logfile | wc -l) files removed, \
-       $(format_bytes_output $space_cleaned) of memory freed
+  files=$(awk '{print $1}' "$logfile")
+  cleanup "$files"
   rm $logfile
 fi
 
@@ -64,6 +59,11 @@ if [ "$method" -eq 2 ]; then
     time_start=$(echo "$time_range" | cut -d " " -f1)
     time_end=$(echo "$time_range" | cut -d " " -f2)
   done
+  
+  fmt_start=$(echo $time_start | sed 's/\//-/g' | sed 's/:/ /1')
+  fmt_end=$(echo $time_end | sed 's/\//-/g' | sed 's/:/ /1')
+  files=$(find / -type f -newermt "$fmt_start" -not -newermt "$fmt_end" 2>/dev/null)
+  cleanup "$files"
 fi
 
 # Cleanup by timestamp
