@@ -42,6 +42,6 @@ function cleanup() {
   
   echo
   echo $(echo "$filefolders" | wc -l) folders, total \
-       $(echo "$files" | wc -l) files removed, \
-       $(format_bytes_output $space_cleaned) of memory freed
+       $(echo "$files" | wc -l) files removed
+  echo $(format_bytes_output $space_cleaned) of memory freed
 }
