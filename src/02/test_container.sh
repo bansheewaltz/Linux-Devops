@@ -1,10 +1,15 @@
 #!/bin/bash
 
-docker run -it --rm \
-           -v "$PWD"/:/home/ \
-           -w /home \
-           -m 3117m \
-           --name monitoring2_dondarri \
-           ubuntu
+image_name=ubuntu_wt:dondarri
 
-rm -f logfile*
+if ! docker image inspect $image_name >/dev/null 2>&1; then
+  docker build -t $image_name - < ../Dockerfile
+fi
+
+docker run -it --rm \
+           -v "$PWD"/..:/home/ \
+           -w /home/02 \
+           -m 3117m \
+           -e TZ=Asia/Novosibirsk \
+           --name monitoring2_dondarri \
+           $image_name
