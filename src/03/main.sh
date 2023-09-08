@@ -30,7 +30,7 @@ if [ "$method" -eq 1 ]; then
   
   read -r logfile
   while [ ! -f "$logfile" ]; do
-    echo "The file is not found. Try again. Or write \"exit\"."
+    echo "The file is not found. Try again. Or write \"exit\" to exit the script."
     read -r logfile
     if [ "$logfile" = exit ]; then
       exit 0; fi
@@ -52,7 +52,7 @@ if [ "$method" -eq 2 ]; then
   time_start=$(echo "$time_range" | cut -d " " -f1)
   time_end=$(echo "$time_range" | cut -d " " -f2)
   while [[ ! $time_start =~ $re_timestamp || ! $time_end =~ $re_timestamp ]]; do
-    echo "Wrong format. Try again. Or write \"exit\"."
+    echo "Wrong format. Try again. Or write \"exit\" to exit the script."
     read -r time_range
     if [ "$time_range" = exit ]; then
       exit 0; fi
@@ -62,8 +62,14 @@ if [ "$method" -eq 2 ]; then
   
   fmt_start=$(echo $time_start | sed 's/\//-/g' | sed 's/:/ /1')
   fmt_end=$(echo $time_end | sed 's/\//-/g' | sed 's/:/ /1')
-  files=$(find / -type f -newermt "$fmt_start" -not -newermt "$fmt_end" 2>/dev/null)
+  files=$(find / -type f \
+                 -not -size -1M \
+                 -newermt "$fmt_start" \
+                 -not -newermt "$fmt_end" \
+                  2>/dev/null)
   cleanup "$files"
+  echo "you can check the list of deleted files at report.txt"
+  echo "$files" > report.txt
 fi
 
 # Cleanup by timestamp
