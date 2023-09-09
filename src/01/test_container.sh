@@ -11,7 +11,7 @@ fi
 docker run -it --rm \
            -v "$PWD"/..:/home/ \
            -w /home \
-           -m 3117m \
+           -m 1123m \
            -e TZ=Asia/Novosibirsk \
            --name monitoring2_dondarri \
            $image_name
