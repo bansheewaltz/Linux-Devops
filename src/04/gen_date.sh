@@ -16,6 +16,7 @@ function gen_date {
   if (( day == 31 && (month == 4 || month == 6 || month == 9 || month == 11) )); then
     day=30;fi
   
+  month_numeric=$month
   case $month in
      1) month="Jan";;
      2) month="Feb";;

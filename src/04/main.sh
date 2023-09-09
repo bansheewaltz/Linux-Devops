@@ -26,7 +26,7 @@ logfile_count=5
 mkdir -p logs
 for ((i = 0; i < logfile_count; i++)); do
   gen_date
-  log_file=$(printf "logs/%.2d-%.2d-%d.log" $day $month $year)
+  log_file=$(printf "logs/%d-%.2d-%.2d.log"  $year $month_numeric $day)
   record_count=$((100 + RANDOM % 900))
   for ((j = 0; j < record_count; j++)); do
     next_time
