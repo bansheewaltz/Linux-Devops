@@ -3,7 +3,7 @@
 image_name=ubuntu_wt:dondarri
 
 if ! docker image inspect $image_name >/dev/null 2>&1; then
-  docker build -t $image_name - < ../Dockerfile
+  docker build -t $image_name - < Dockerfile
 fi
 
 docker run -it --rm \
