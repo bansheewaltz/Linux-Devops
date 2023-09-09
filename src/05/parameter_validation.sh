@@ -1,10 +1,9 @@
 function echoerr {
-  >&2 echo "$@"
+  >&2 echo -e $@
 }
 
 function terminate {
-  echoerr "Error: incorrect input"
-  echoerr $1
+  echoerr $@
   exit 1
 }
 
@@ -33,9 +32,15 @@ function validate_parameter {
     exit 0;
   fi
   
-  re_parameter='^[1-4]$'
+  local re_parameter='^[1-4]$'
   if [[ ! $parameter =~ $re_parameter ]]; then
-    terminate "The parameter value should be in a range of 1-4 accordingly to \
+    terminate "Error: incorrect input" \
+            "\nThe parameter value should be in a range of 1-4 accordingly to\
                a number of routines."
+  fi
+
+  if [ "$logs" = "" ]; then
+    terminate "Error: nothing to parse" \
+            "\nLog files are not found"
   fi
 }
