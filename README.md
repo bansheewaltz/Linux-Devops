@@ -24,7 +24,7 @@ The russian version of the task can be found in the repository.
 
 ## Chapter I
 
-![basic_ci_cd](misc/images/basic_ci_cd.JPG)
+![basic_ci_cd](task/misc/images/basic_ci_cd.JPG)
 
 Planet Earth, United Kingdom of Great Britain and Northern Ireland, London, Oxford Street, ASI office, nowadays.
 
