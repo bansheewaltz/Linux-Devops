@@ -1,4 +1,16 @@
 services:
+  test-env:
+    build: ../../
+    container_name: test-env
+    tty: true
+    deploy:
+      resources:
+        limits:
+          memory: 3000m
+    volumes:
+      - ../../:/home
+    working_dir: /home
+
   node-exporter:
     image: prom/node-exporter:latest
     container_name: node-exporter
