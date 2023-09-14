@@ -1,17 +1,7 @@
-networks:
-  monitoring:
-    driver: bridge
-volumes:
-  prometheus_data: {}
-
 services:
-  # test-machine:
-  #   build: ../../
-
   node-exporter:
     image: prom/node-exporter:latest
     container_name: node-exporter
-    restart: unless-stopped
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -23,13 +13,10 @@ services:
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
     ports:
       - 9100:9100
-    networks:
-      - monitoring
 
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
-    restart: unless-stopped
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - ./prometheus:/prometheus
@@ -41,35 +28,26 @@ services:
       - '--web.enable-lifecycle'
     ports:
       - 9090:9090
-    networks:
-      - monitoring
 
   grafana:
     image: grafana/grafana:latest
-    # user: "1001" 
     container_name: grafana
-    ports:
-      - 3000:3000
-    restart: unless-stopped
     volumes:
       - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
       - ./grafana:/var/lib/grafana
-    networks:
-      - monitoring
+    ports:
+      - 3000:3000
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.47.2
     container_name: cadvisor
-    privileged: true
-    ports:
-      - 8080:8080
-    networks:
-      - monitoring
     volumes:
       - /:/rootfs:ro
       - /var/run/docker.sock:/var/run/docker.sock:rw
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
+    ports:
+      - 8080:8080
     depends_on:
       - redis
 
@@ -78,5 +56,3 @@ services:
     container_name: redis
     ports:
       - 6379:6379
-    networks:
-      - monitoring
