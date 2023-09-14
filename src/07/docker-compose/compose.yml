@@ -40,15 +40,20 @@ services:
       - '--web.enable-lifecycle'
     ports:
       - 9090:9090
+    depends_on:
+      - cadvisor
 
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
     volumes:
       - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
       - ./grafana:/var/lib/grafana
     ports:
       - 3000:3000
+    depends_on:
+      - prometheus
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.47.2
@@ -62,6 +67,7 @@ services:
       - 8080:8080
     depends_on:
       - redis
+      - test-env
 
   redis:
     image: redis:latest
