@@ -1,0 +1,35 @@
+stages:
+  - build
+  - test
+  - deploy
+
+build-job:
+  stage: build
+  script:
+    - make s21_grep s21_cat
+  artifacts:
+    paths:
+      - build/bin/s21_cat
+      - build/bin/s21_grep
+    expire_in: 30 days
+  after_script:
+    - notify.sh $CI_JOB_STATUS
+
+unit-test:
+  stage: test
+  script:
+    - make test
+
+lint-test:
+  stage: test
+  script:
+    - find src -name '*.c' | xargs clang-format -Werror -n
+
+deploy-app:
+  stage: deploy
+  when: manual
+  script:
+    - deploy.sh
+  after_script:
+    - notify.sh $CI_JOB_STATUS
+#   allow_failure: false
