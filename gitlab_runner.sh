@@ -6,7 +6,7 @@ if [ $# = 0 ]; then
 
 if [ "$1" = start ]; then
   docker build --tag ubuntu:runner - < Dockerfile.ci_runner 
-  docker run --rm -it -p 22 --name runner \
+  docker run --rm -it --name runner \
              -v /Users/Shared/gitlab-runner/config:/etc/gitlab-runner \
              -v /var/run/docker.sock:/var/run/docker.sock \
              gitlab/gitlab-runner
@@ -36,6 +36,6 @@ fi
 
 if [ "$1" = server ]; then
   docker build --tag ubuntu:server - < Dockerfile.server
-  docker run --rm -d -p 53515:22 --name server ubuntu:server
+  docker run --rm -d --name server ubuntu:server
   docker exec -it server bash -c 'cd /usr/local/bin && bash'
 fi
