@@ -36,6 +36,6 @@ fi
 
 if [ "$1" = server ]; then
   docker build --tag ubuntu:server - < Dockerfile.server
-  docker run --rm -d --name server ubuntu:server
+  docker run --rm -d --name server --hostname server ubuntu:server
   docker exec -it server bash -c 'cd /usr/local/bin && bash'
 fi
