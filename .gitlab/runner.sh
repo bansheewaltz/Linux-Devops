@@ -1,16 +1,13 @@
 #!/bin/bash
 
-if [ $# = 0 ]; then
-  echo no args provided; exit 0; fi
-
-
-if [ "$1" = start ]; then
-  docker build --tag ubuntu:runner - < Dockerfile.ci_runner 
+if [ $# = 0 ] || [ "$1" = start ]; then
+  docker build --tag ubuntu:runner - < runner.Dockerfile
   docker run --rm -it --name runner \
              -v /Users/Shared/gitlab-runner/config:/etc/gitlab-runner \
              -v /var/run/docker.sock:/var/run/docker.sock \
              gitlab/gitlab-runner
 fi
+
 
 function allow_local_images {
   # source https://www.awaimai.com/en/3100.html
@@ -19,6 +16,7 @@ function allow_local_images {
   docker cp config.toml gitlab-runner:/etc/gitlab-runner
   rm config.toml
 }
+
 if [ "$1" = register ]; then
   docker run --rm -it \
              -v /Users/Shared/gitlab-runner/config:/etc/gitlab-runner \
@@ -32,10 +30,4 @@ if [ "$1" = register ]; then
   # --template-config /tmp/test-config.template.toml \
   # --docker-image ruby:2.6
   allow_local_images
-fi
-
-if [ "$1" = server ]; then
-  docker build --tag ubuntu:server - < Dockerfile.server
-  docker run --rm -d --name server --hostname server ubuntu:server
-  docker exec -it server bash -c 'cd /usr/local/bin && bash'
 fi
