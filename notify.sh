@@ -10,7 +10,10 @@ TEXT="
 Deploy status: $1%0A%0A\
 Project:+$CI_PROJECT_NAME%0A\
 URL:+$CI_PROJECT_URL/pipelines/$CI_PIPELINE_ID/%0A\
-Branch:+$CI_COMMIT_REF_SLUG"
+Branch:+$CI_COMMIT_REF_SLUG%0A\
+Commit author:+$CI_COMMIT_AUTHOR%0A\
+Commit message:%0A\
+$CI_COMMIT_MESSAGE"
 
 TIME=10
 curl -s --max-time $TIME \
