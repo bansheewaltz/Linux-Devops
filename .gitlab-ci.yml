@@ -13,7 +13,7 @@ build-job:
       - build/bin/s21_grep
     expire_in: 30 days
   after_script:
-    - notify.sh $CI_JOB_STATUS
+    - bash notify.sh
 
 unit-test:
   stage: test

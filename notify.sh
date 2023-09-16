@@ -5,6 +5,10 @@ TELEGRAM_USER_ID=71115111
 #  user id. Is obtained when creating bot via @BotFather
 TELEGRAM_BOT_TOKEN=6627077999:AAEaRjYRMsF27MhpIv8Jdwb9b8hXDd3vVKc
 
+if [ "$CI_JOB_STATUS" = success ] && ! [ "$CI_JOB_STAGE" = deploy ]; then
+  exit 0;
+fi
+
 URL="https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage"
 TEXT="
 $CI_JOB_STAGE:$CI_JOB_NAME status: $CI_JOB_STATUS%0A%0A\
