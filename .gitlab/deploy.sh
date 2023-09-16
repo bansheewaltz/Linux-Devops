@@ -1,6 +1,6 @@
 #!/bin/bash
 
-server=172.17.0.4
+server=172.17.0.3
 # source: https://stackoverflow.com/a/20686101
 # server_ip=$(docker inspect \
 #   -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' container_name_or_id)
