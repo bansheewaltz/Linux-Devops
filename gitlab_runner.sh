@@ -3,7 +3,7 @@
 if [ "$1" = start ]; then
   docker build --tag ubuntu:runner - < Dockerfile.ci_runner 
   # docker run -p 22 --rm -ti --name u2 --network test ubuntu:v2 bash
-  docker run --rm -itd -p 22 --name runner \
+  docker run --rm -it -p 22 --name runner \
     -v /Users/Shared/gitlab-runner/config:/etc/gitlab-runner \
     -v /var/run/docker.sock:/var/run/docker.sock \
     gitlab/gitlab-runner
@@ -40,14 +40,15 @@ if [ "$1" = rm ]; then
   docker container rm -f gitlab-runner
 fi
 
-if [ "$1" = vm ]; then
-  docker run --rm -itd -p 53515:22 --name vm ubuntu:20.04
-  docker exec -it vm bash -c 'apt update && \
-                              DEBIAN_FRONTEND=noninteractive \
-                              apt-get install -y openssh-server && \
-                              echo "PermitRootLogin yes" >> /etc/ssh/sshd_config && \
-                              service ssh restart && \
-                              echo "root:1" | chpasswd && \
-                              bash'
+if [ "$1" = server ]; then
+  docker build --tag ubuntu:server - < Dockerfile.server
+  docker run --rm -it -p 53515:22 --name server ubuntu:server
+  # docker exec -it vm bash -c 'apt update && \
+  #                             DEBIAN_FRONTEND=noninteractive \
+  #                             apt-get install -y openssh-server && \
+  #                             echo "PermitRootLogin yes" >> /etc/ssh/sshd_config && \
+  #                             service ssh restart && \
+  #                             echo "root:1" | chpasswd && \
+  #                             bash'
 fi
                               # sed -i "s/#PermitRootLogin prohibit-password/PermitRootLogin yes/g" /etc/ssh/sshd_config && \
