@@ -3,12 +3,13 @@
 if [ "$1" = start ]; then
   docker build --tag ubuntu:runner - < Dockerfile.ci_runner 
   # docker run -p 22 --rm -ti --name u2 --network test ubuntu:v2 bash
-  docker run --rm -itd -p 22 --network net --name runner \
+  docker run --rm -itd -p 22 --name runner \
     -v /Users/Shared/gitlab-runner/config:/etc/gitlab-runner \
     -v /var/run/docker.sock:/var/run/docker.sock \
     gitlab/gitlab-runner
   # docker exec -it runner bash -c 'ssh-keygen -t rsa -N "" -f /root/.ssh/vm_key && \
   #                                 sshpass -p1 ssh-copy-id -o StrictHostKeyChecking=no -i ~/.ssh/vm_key.pub root@vm && \
+  #                                 scp -P53515 /usr/sbin/* root@0.0.0.0:/usr/local/bin && \
   #                                 bash'
   
 fi
@@ -40,7 +41,7 @@ if [ "$1" = rm ]; then
 fi
 
 if [ "$1" = vm ]; then
-  docker run --rm -itd -p 22 --network net --name vm ubuntu:20.04
+  docker run --rm -itd -p 53515:22 --name vm ubuntu:20.04
   docker exec -it vm bash -c 'apt update && \
                               DEBIAN_FRONTEND=noninteractive \
                               apt-get install -y openssh-server && \
