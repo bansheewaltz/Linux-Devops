@@ -3,9 +3,9 @@
 if [ "$1" = start ]; then
   docker build --tag ubuntu:runner - < Dockerfile.ci_runner 
   docker run --rm -it -p 22 --name runner \
-    -v /Users/Shared/gitlab-runner/config:/etc/gitlab-runner \
-    -v /var/run/docker.sock:/var/run/docker.sock \
-    gitlab/gitlab-runner
+             -v /Users/Shared/gitlab-runner/config:/etc/gitlab-runner \
+             -v /var/run/docker.sock:/var/run/docker.sock \
+             gitlab/gitlab-runner
 fi
 
 function allow_local_images {
@@ -17,9 +17,9 @@ function allow_local_images {
 }
 if [ "$1" = register ]; then
   docker run --rm -it \
-    -v /Users/Shared/gitlab-runner/config:/etc/gitlab-runner \
-    gitlab/gitlab-runner \
-    register
+             -v /Users/Shared/gitlab-runner/config:/etc/gitlab-runner \
+             gitlab/gitlab-runner \
+             register
   # interactive; otherwise, as example:
   # --url "https://gitlab.example.com/" \
   # --registration-token "PROJECT_REGISTRATION_TOKEN" \

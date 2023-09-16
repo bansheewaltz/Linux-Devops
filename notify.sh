@@ -13,6 +13,7 @@ fi
 URL="https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage"
 CI_COMMIT_AUTHOR=${CI_COMMIT_AUTHOR//[<>]/}
 CI_JOB_STATUS=${CI_JOB_STATUS^^}
+
 TEXT="
 Project:+$CI_PROJECT_NAME%0A\
 $CI_JOB_STAGE:$CI_JOB_NAME status: <b>$CI_JOB_STATUS</b>%0A\
@@ -23,12 +24,11 @@ Commit message:%0A\
 $CI_COMMIT_MESSAGE"
 
 TIME=3
-curl \
- -s \
- --max-time $TIME \
- --data parse_mode=HTML \
- --data chat_id=$TELEGRAM_USER_ID \
- --data text="$TEXT" \
- --data disable_web_page_preview=1 \
- --request POST $URL \
- > /dev/null
+curl -s \
+     --max-time $TIME \
+     --data parse_mode=HTML \
+     --data chat_id=$TELEGRAM_USER_ID \
+     --data text="$TEXT" \
+     --data disable_web_page_preview=1 \
+     --request POST $URL \
+     > /dev/null
