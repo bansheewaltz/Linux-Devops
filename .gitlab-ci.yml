@@ -14,21 +14,21 @@ build-job:
       - build/bin/s21_grep
     expire_in: 30 days
   after_script:
-    - bash notify.sh
+    - bash .gitlab/notify.sh
 
 lint-test:
   stage: lint
   script:
     - find src -name '*.c' | xargs clang-format -Werror -n
   after_script:
-  - bash notify.sh
+  - bash .gitlab/notify.sh
 
 unit-test:
   stage: test
   script:
     - make test
   after_script:
-    - bash notify.sh
+    - bash .gitlab/notify.sh
 
 
 deploy-app:
@@ -36,6 +36,6 @@ deploy-app:
   when: manual
   allow_failure: false
   script:
-    - bash deploy.sh
+    - bash .gitlab/deploy.sh
   after_script:
-    - bash notify.sh
+    - bash .gitlab/notify.sh
