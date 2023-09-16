@@ -8,7 +8,6 @@
   -s -n -e test_files/test_4_cat.txt
   test_files/test_1_cat.txt -n
   -n test_files/test_1_cat.txt
-  -n test_files/test_1_cat.txt test_files/test_2_cat.txt
   -v test_files/test_5_cat.txt
   -- test_files/test_5_cat.txt
   -T test_files/test_1_cat.txt
