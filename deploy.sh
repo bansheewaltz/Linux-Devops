@@ -1,6 +1,7 @@
 #!/bin/bash
 
 ssh-keygen -t rsa -N "" -f /root/.ssh/server_key
+# source: https://stackoverflow.com/a/20686101
 # server_ip=$(docker inspect \
 #   -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' container_name_or_id)
 server=172.17.0.3
