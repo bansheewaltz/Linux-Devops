@@ -28,8 +28,8 @@ lint-test:
 deploy-app:
   stage: deploy
   when: manual
+  allow_failure: false
   script:
-    - deploy.sh
+    - bash deploy.sh
   after_script:
-    - bash notify.sh $CI_JOB_STATUS
-#   allow_failure: false
+    - bash notify.sh

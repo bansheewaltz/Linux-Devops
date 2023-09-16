@@ -7,7 +7,7 @@ TELEGRAM_BOT_TOKEN=6627077999:AAEaRjYRMsF27MhpIv8Jdwb9b8hXDd3vVKc
 
 URL="https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage"
 TEXT="
-Deploy status: $1%0A%0A\
+$CI_JOB_STAGE:$CI_JOB_NAME status: $CI_JOB_STATUS%0A%0A\
 Project:+$CI_PROJECT_NAME%0A\
 URL:+$CI_PROJECT_URL/pipelines/$CI_PIPELINE_ID/%0A\
 Branch:+$CI_COMMIT_REF_SLUG%0A\
