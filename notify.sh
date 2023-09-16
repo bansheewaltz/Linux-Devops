@@ -14,26 +14,21 @@ URL="https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage"
 CI_COMMIT_AUTHOR=${CI_COMMIT_AUTHOR//[<>]/}
 CI_JOB_STATUS=${CI_JOB_STATUS^^}
 TEXT="
-$CI_JOB_STAGE:$CI_JOB_NAME status: <b>$CI_JOB_STATUS</b>%0A\
 Project:+$CI_PROJECT_NAME%0A\
+$CI_JOB_STAGE:$CI_JOB_NAME status: <b>$CI_JOB_STATUS</b>%0A\
 URL:+$CI_PROJECT_URL/pipelines/$CI_PIPELINE_ID/%0A\
 Branch:+$CI_COMMIT_REF_SLUG%0A\
 Commit author:+$CI_COMMIT_AUTHOR%0A\
 Commit message:%0A\
 $CI_COMMIT_MESSAGE"
 
-TIME=10
-#  -s \
-#  > /dev/null
+TIME=3
 curl \
+ -s \
  --max-time $TIME \
  --data parse_mode=HTML \
  --data chat_id=$TELEGRAM_USER_ID \
  --data text="$TEXT" \
  --data disable_web_page_preview=1 \
  --request POST $URL \
-
-echo $TEXT
-# curl -s --max-time $TIME \
-#      -d "chat_id=$TELEGRAM_USER_ID&disable_web_page_preview=1&text=$TEXT" \
-#      $URL > /dev/null
+ > /dev/null
