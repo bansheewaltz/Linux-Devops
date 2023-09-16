@@ -2,16 +2,10 @@
 
 if [ "$1" = start ]; then
   docker build --tag ubuntu:runner - < Dockerfile.ci_runner 
-  # docker run -p 22 --rm -ti --name u2 --network test ubuntu:v2 bash
   docker run --rm -it -p 22 --name runner \
     -v /Users/Shared/gitlab-runner/config:/etc/gitlab-runner \
     -v /var/run/docker.sock:/var/run/docker.sock \
     gitlab/gitlab-runner
-  # docker exec -it runner bash -c 'ssh-keygen -t rsa -N "" -f /root/.ssh/vm_key && \
-  #                                 sshpass -p1 ssh-copy-id -o StrictHostKeyChecking=no -i ~/.ssh/vm_key.pub root@vm && \
-  #                                 scp -P53515 /usr/sbin/* root@0.0.0.0:/usr/local/bin && \
-  #                                 bash'
-  
 fi
 
 function allow_local_images {
@@ -44,12 +38,4 @@ if [ "$1" = server ]; then
   docker build --tag ubuntu:server - < Dockerfile.server
   docker run --rm -d -p 53515:22 --name server ubuntu:server
   docker exec -it server bash -c 'cd /usr/local/bin && bash'
-  # docker exec -it vm bash -c 'apt update && \
-  #                             DEBIAN_FRONTEND=noninteractive \
-  #                             apt-get install -y openssh-server && \
-  #                             echo "PermitRootLogin yes" >> /etc/ssh/sshd_config && \
-  #                             service ssh restart && \
-  #                             echo "root:1" | chpasswd && \
-  #                             bash'
 fi
-                              # sed -i "s/#PermitRootLogin prohibit-password/PermitRootLogin yes/g" /etc/ssh/sshd_config && \
