@@ -4,7 +4,7 @@
 **   where each pattern is delimited with a pipe symbol '|' (the GNU way)
 ** * tests output matches Ubuntu grep utility
 */
-#define _GNU_SOURCE // getline function
+#define _GNU_SOURCE  // getline function
 #include <errno.h>
 #include <getopt.h>
 #include <regex.h>
@@ -147,47 +147,47 @@ int parse_options(int argc, char *argv[], t_options *flags,
   int opt;
   while ((opt = getopt_long(argc, argv, "e:ivclnhsf:o", NULL, NULL)) != -1) {
     switch (opt) {
-    case 'e':
-      flags->e = true;
-      if (add_pattern(re_pattern, optarg, FROM_E) != SUCCESS) {
+      case 'e':
+        flags->e = true;
+        if (add_pattern(re_pattern, optarg, FROM_E) != SUCCESS) {
+          return ERROR;
+        }
+        break;
+      case 'i':
+        flags->i = true;
+        break;
+      case 'v':
+        flags->v = true;
+        break;
+      case 'c':
+        flags->c = true;
+        break;
+      case 'l':
+        flags->l = true;
+        break;
+      case 'n':
+        flags->n = true;
+        break;
+      case 'h':
+        flags->h = true;
+        break;
+      case 's':
+        flags->s = true;
+        break;
+      case 'f':
+        flags->f = true;
+        if (add_pattern(re_pattern, optarg, FROM_FILE) != SUCCESS) {
+          return ERROR;
+        }
+        re_pattern->specified_through_option = true;
+        break;
+      case 'o':
+        flags->o = true;
+        break;
+      case '?':
+        fprintf(stderr, "%s: invalid option -- '%c'\n", PROGRAM_NAME, optopt);
+        print_usage();
         return ERROR;
-      }
-      break;
-    case 'i':
-      flags->i = true;
-      break;
-    case 'v':
-      flags->v = true;
-      break;
-    case 'c':
-      flags->c = true;
-      break;
-    case 'l':
-      flags->l = true;
-      break;
-    case 'n':
-      flags->n = true;
-      break;
-    case 'h':
-      flags->h = true;
-      break;
-    case 's':
-      flags->s = true;
-      break;
-    case 'f':
-      flags->f = true;
-      if (add_pattern(re_pattern, optarg, FROM_FILE) != SUCCESS) {
-        return ERROR;
-      }
-      re_pattern->specified_through_option = true;
-      break;
-    case 'o':
-      flags->o = true;
-      break;
-    case '?':
-      fprintf(stderr, "%s: invalid option -- '%c'\n", PROGRAM_NAME, optopt);
-      print_usage();
-      return ERROR;
     }
   }
 
@@ -226,10 +226,10 @@ void file_related_output(t_options *flags, char *filename, int matched_n) {
 
 bool dont_need_line_output(t_options *flags, bool is_pattern_dot,
                            bool line_empty) {
-  return flags->l ||                     //
-         flags->c ||                     //
-         (flags->v && flags->o) ||       //
-         (is_pattern_dot && line_empty); //
+  return flags->l ||                      //
+         flags->c ||                      //
+         (flags->v && flags->o) ||        //
+         (is_pattern_dot && line_empty);  //
 }
 
 void handle_option_o(t_re *re, t_options *flags, char *line, int line_ndx,
@@ -245,7 +245,7 @@ void process_file(FILE *file, char *filename, t_options *flags, t_re *re) {
   char *line = NULL;
   size_t capacity = 0;
   int matched_n = 0;
-  int line_ndx = 0; // +1 -- human readable
+  int line_ndx = 0;  // +1 -- human readable
 
   while (getline(&line, &capacity, file) > 0) {
     ++line_ndx;
