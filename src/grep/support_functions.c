@@ -17,8 +17,8 @@ void print_usage(void) {
 }
 
 bool arg_is_pattern_option(char arg[]) {
-  return arg[0] == '-' &&                         //
-         (strchr(arg, 'f') || strchr(arg, 'e'));  //
+  return arg[0] == '-' &&                        //
+         (strchr(arg, 'f') || strchr(arg, 'e')); //
 }
 
 void print_opterror(char arg[]) {
@@ -50,7 +50,7 @@ bool arguments_are_enough(int argc, char *argv[], t_info *re_pattern) {
       i += 2;
       continue;
     }
-    if (!pattern_from_option &&  //
+    if (!pattern_from_option && //
         !pattern_from_argv) {
       pattern_from_argv = true;
       ++i;

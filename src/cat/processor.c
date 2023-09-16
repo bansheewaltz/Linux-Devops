@@ -9,12 +9,12 @@
 
 static bool condition_show_nonprinting(t_info *s_info) {
   uchar ch = s_info->cur_ch;
-  return 1                                           //
-         && s_info->s_flags->opt_v_show_nonprinting  //
-         && s_info->already_printed == false         //
-         && !isgraph(ch)                             //
-         && !isblank(ch)                             //
-         && ch != '\n';                              //
+  return 1                                          //
+         && s_info->s_flags->opt_v_show_nonprinting //
+         && s_info->already_printed == false        //
+         && !isgraph(ch)                            //
+         && !isblank(ch)                            //
+         && ch != '\n';                             //
 }
 
 static void show_nonprinting(t_info *s_info) {
@@ -27,10 +27,10 @@ static void show_nonprinting(t_info *s_info) {
 }
 
 static bool condition_show_EOLs(t_info *s_info) {
-  return 1                                    //
-         && s_info->s_flags->opt_E_show_EOLs  //
-         && s_info->already_printed == false  //
-         && (s_info->cur_ch == '\n');         //
+  return 1                                   //
+         && s_info->s_flags->opt_E_show_EOLs //
+         && s_info->already_printed == false //
+         && (s_info->cur_ch == '\n');        //
 }
 
 static void show_EOLs(t_info *s_info) {
@@ -43,10 +43,10 @@ static void show_EOLs(t_info *s_info) {
 }
 
 static bool condition_show_tabs(t_info *s_info) {
-  return 1                                    //
-         && s_info->s_flags->opt_T_show_tabs  //
-         && s_info->already_printed == false  //
-         && (s_info->cur_ch == '\t');         //
+  return 1                                   //
+         && s_info->s_flags->opt_T_show_tabs //
+         && s_info->already_printed == false //
+         && (s_info->cur_ch == '\t');        //
 }
 
 static void show_tabs(t_info *s_info) {
@@ -66,12 +66,12 @@ static void squeeze_blank(t_info *s_info) {
 }
 
 static bool condition_number_lines(t_info *s_info) {
-  return 1                                               //
-         && s_info->prev_ch == '\n'                      //
-         && s_info->already_printed == false             //
-         && (s_info->s_flags->opt_n_number_lines         //
-             || (s_info->s_flags->opt_b_number_nonblank  //
-                 && s_info->cur_ch != '\n'));            //
+  return 1                                              //
+         && s_info->prev_ch == '\n'                     //
+         && s_info->already_printed == false            //
+         && (s_info->s_flags->opt_n_number_lines        //
+             || (s_info->s_flags->opt_b_number_nonblank //
+                 && s_info->cur_ch != '\n'));           //
 }
 
 static void number_lines(t_info *s_info) {

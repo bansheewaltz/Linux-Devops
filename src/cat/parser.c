@@ -24,34 +24,34 @@ static void validate_option(t_options *s_flags, char arg[], char **invalid_opt,
   } else {
     for (char *ch = arg; !*invalid_opt && *ch != '\0'; ++ch) {
       switch (*ch) {
-        case 'b':
-          s_flags->opt_b_number_nonblank = true;
-          break;
-        case 'e':
-          s_flags->opt_E_show_EOLs = true;
-          s_flags->opt_v_show_nonprinting = true;
-          break;
-        case 'E':
-          s_flags->opt_E_show_EOLs = true;
-          break;
-        case 'n':
-          s_flags->opt_n_number_lines = true;
-          break;
-        case 's':
-          s_flags->opt_s_squeeze_blank = true;
-          break;
-        case 't':
-          s_flags->opt_T_show_tabs = true;
-          s_flags->opt_v_show_nonprinting = true;
-          break;
-        case 'T':
-          s_flags->opt_T_show_tabs = true;
-          break;
-        case 'v':
-          s_flags->opt_v_show_nonprinting = true;
-          break;
-        default:
-          *invalid_opt = ch;
+      case 'b':
+        s_flags->opt_b_number_nonblank = true;
+        break;
+      case 'e':
+        s_flags->opt_E_show_EOLs = true;
+        s_flags->opt_v_show_nonprinting = true;
+        break;
+      case 'E':
+        s_flags->opt_E_show_EOLs = true;
+        break;
+      case 'n':
+        s_flags->opt_n_number_lines = true;
+        break;
+      case 's':
+        s_flags->opt_s_squeeze_blank = true;
+        break;
+      case 't':
+        s_flags->opt_T_show_tabs = true;
+        s_flags->opt_v_show_nonprinting = true;
+        break;
+      case 'T':
+        s_flags->opt_T_show_tabs = true;
+        break;
+      case 'v':
+        s_flags->opt_v_show_nonprinting = true;
+        break;
+      default:
+        *invalid_opt = ch;
       }
     }
   }
@@ -74,7 +74,8 @@ static void sort_argv(int argc, char *argv[], int *filename_was_given) {
       move_arg_to_the_end(i, argc, argv);
       ++file_c;
     }
-    if (argv[i][0] == '-') ++opt_c;
+    if (argv[i][0] == '-')
+      ++opt_c;
   }
   file_c ? (*filename_was_given = opt_c + 1) : 0;
 }
@@ -87,14 +88,14 @@ static void options_conflict_resolution(t_options *s_flags) {
 bool parse_options(int argc, char *argv[], t_options *s_flags,
                    int *filename_was_given) {
   char *invalid_opt = NULL;
-  int invalid_opt_len = 1;  // assume that a chance of a short invalid
-                            // option occurrence is higher;
+  int invalid_opt_len = 1; // assume that a chance of a short invalid
+                           // option occurrence is higher;
   sort_argv(argc, argv, filename_was_given);
   // in a case if there are some options
   // that were passed after filenames (GNU feature)
-  for (int arg_ndx = 1;                                          //
-       arg_ndx < argc && *argv[arg_ndx] == '-' && !invalid_opt;  //
-       ++arg_ndx) {                                              //
+  for (int arg_ndx = 1;                                         //
+       arg_ndx < argc && *argv[arg_ndx] == '-' && !invalid_opt; //
+       ++arg_ndx) {                                             //
     validate_option(s_flags, ++argv[arg_ndx], &invalid_opt, &invalid_opt_len);
   }
 
