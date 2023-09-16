@@ -31,5 +31,5 @@ deploy-app:
   script:
     - deploy.sh
   after_script:
-    - notify.sh $CI_JOB_STATUS
+    - bash notify.sh $CI_JOB_STATUS
 #   allow_failure: false
