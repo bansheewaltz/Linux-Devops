@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ $# = 0 ]; then
+  echo no args provided; exit 0; fi
+
+
 if [ "$1" = start ]; then
   docker build --tag ubuntu:runner - < Dockerfile.ci_runner 
   docker run --rm -it -p 22 --name runner \
@@ -28,10 +32,6 @@ if [ "$1" = register ]; then
   # --template-config /tmp/test-config.template.toml \
   # --docker-image ruby:2.6
   allow_local_images
-fi
-
-if [ "$1" = rm ]; then
-  docker container rm -f gitlab-runner
 fi
 
 if [ "$1" = server ]; then
