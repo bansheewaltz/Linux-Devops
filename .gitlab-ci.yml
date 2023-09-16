@@ -30,7 +30,6 @@ unit-test:
   after_script:
     - bash .gitlab/notify.sh
 
-
 deploy-app:
   stage: deploy
   when: manual

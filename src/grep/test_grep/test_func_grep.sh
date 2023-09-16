@@ -165,3 +165,7 @@ if [[ "$mode" != "time" ]]; then
 fi
 
 rm {Makefile,main.c,typedefs.h,*.log,s21_grep} 2>/dev/null || true
+
+if ((FAIL > 0)); then
+  exit 1;
+fi

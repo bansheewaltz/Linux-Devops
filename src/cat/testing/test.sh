@@ -195,7 +195,7 @@ handwritten_entries_test() {
   local test_file=$testing_dir/handwritten_entries.txt
   local c_processed=1
   local c_success=0
-  local c_failure=0
+  c_failure=0
 
   printf "%${total_len}s\n" | tr " " "-"
   printf "${ORN}TESTING WITH THE HADWRITTEN ENTRIES:${REG}\n"
@@ -226,10 +226,16 @@ apply_automatic_OS_based_settings
 apply_automatic_formatting_calculations
 prepare_log_dir
 
+declare -i failures_total=0
 combine_and_pass $options_set
 print_summary
+((failures_total+=c_failure))
 # exec 2>/dev/null # *Turn on/off by (un)commenting to suppress stderror output*
 handwritten_entries_test
-
+((failures_total+=c_failure))
 clear_temp_files
+
+if ((failures_total > 0)); then
+  exit 1;
+fi
 ###
