@@ -42,7 +42,8 @@ fi
 
 if [ "$1" = server ]; then
   docker build --tag ubuntu:server - < Dockerfile.server
-  docker run --rm -it -p 53515:22 --name server ubuntu:server
+  docker run --rm -d -p 53515:22 --name server ubuntu:server
+  docker exec -it server bash -c 'cd /usr/local/bin && bash'
   # docker exec -it vm bash -c 'apt update && \
   #                             DEBIAN_FRONTEND=noninteractive \
   #                             apt-get install -y openssh-server && \

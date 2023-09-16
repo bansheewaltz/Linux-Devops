@@ -6,5 +6,6 @@ RUN apt-get update; \
                        sshpass; \
     rm -rf /var/lib/apt/lists/*; \
     echo "PermitRootLogin yes" >> /etc/ssh/sshd_config; \
-    service ssh restart; \
     echo "root:1" | chpasswd
+
+ENTRYPOINT service ssh start && tail -f /dev/null
