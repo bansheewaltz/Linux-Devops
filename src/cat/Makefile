@@ -7,7 +7,8 @@ SRC := main.c parser.c processor.c error_outputs.c
 PROGRAM := cat
 PREFIX := s21_
 BUILD_BIN_DIR := ../../build/bin
-EXE := ${PREFIX}${PROGRAM}
+EXE := ${BUILD_BIN_DIR}/${PREFIX}${PROGRAM}
+export EXE
 # compile options
 CC := gcc
 WFLAGS := -Wall -Wextra -Werror

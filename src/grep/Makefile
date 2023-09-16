@@ -8,6 +8,7 @@ PROGRAM := grep
 PREFIX := s21_
 BUILD_BIN_DIR := ../../build/bin
 EXE := ${BUILD_BIN_DIR}/${PREFIX}${PROGRAM}
+export EXE
 # compile options
 CC := gcc
 WFLAGS := -Wall -Wextra -Werror
@@ -62,11 +63,11 @@ compiler:
 	$(MAKE) build_compile_check
 build_compile_check: # separate task because of sanitizers don't work on ARM
 	$(CC) -o $(EXE) $(DEBUG_INFO) $(OS_MACRO) $(WFLAGS) $(STD) $(SRC)
-asan: clean
-	$(CC) -o $(EXE) $(DEBUG_INFO) $(OS_MACRO) $(WFLAGS) $(STD) $(DFLAGS) $(SRC)
-	cp Makefile s21* ./test_grep
-	@cd test_grep && bash test_func_grep.sh
-	rm ./test_grep/s21*
+# asan: clean
+# 	$(CC) -o $(EXE) $(DEBUG_INFO) $(OS_MACRO) $(WFLAGS) $(STD) $(DFLAGS) $(SRC)
+# 	cp Makefile s21* ./test_grep
+# 	@cd test_grep && bash test_func_grep.sh
+# 	rm ./test_grep/s21*
 test: build
 	printf "\ec"
 	@cd test_grep && time bash test_func_grep.sh

@@ -10,7 +10,7 @@ cat_GNU="-b -e -n -s -t -v -E -T --number --squeeze-blank --number-nonblank"
 ##### USER DEFINED GLOBAL TESTING PARAMETERS
 # utility="cat" # is passed by shell variable
 prefix="s21_"
-target_utility="../${prefix}${utility}"
+target_utility="../${EXE}"
 options_set=$cat_stripped
 test_file="test_case_cat.txt" # multiple files could be set
 dynamic_analyzer="valgrind"   # will be overwritten based on OS type

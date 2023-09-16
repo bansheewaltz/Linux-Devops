@@ -10,6 +10,8 @@ GRN="\033[38;5;106m"
 REG="\033[0m"
 tests_n=2166
 
+EXE="../${EXE}"
+
 rm {Makefile,main.c,typedefs.h,*.log,s21_grep} 2>/dev/null
 cp ../{Makefile,main.c,typedefs.h,s21_grep} ./
 
@@ -76,7 +78,7 @@ testing() {
     ((COUNTER++))
     progress_bar $COUNTER $tests_n
   else
-    ./s21_grep $t >test_s21_grep.log
+    $EXE $t >test_s21_grep.log
     grep $t >test_sys_grep.log
     DIFF_RES="$(diff -s test_s21_grep.log test_sys_grep.log)"
     ((COUNTER++))
