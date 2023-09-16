@@ -1,5 +1,6 @@
 stages:
   - build
+  - lint
   - test
   - deploy
 
@@ -15,6 +16,13 @@ build-job:
   after_script:
     - bash notify.sh
 
+lint-test:
+  stage: lint
+  script:
+    - find src -name '*.c' | xargs clang-format -Werror -n
+  after_script:
+  - bash notify.sh
+
 unit-test:
   stage: test
   script:
@@ -22,12 +30,6 @@ unit-test:
   after_script:
     - bash notify.sh
 
-lint-test:
-  stage: test
-  script:
-    - find src -name '*.c' | xargs clang-format -Werror -n
-  after_script:
-  - bash notify.sh
 
 deploy-app:
   stage: deploy
