@@ -38,3 +38,6 @@ deploy-app:
     - bash .gitlab/deploy.sh
   after_script:
     - bash .gitlab/notify.sh
+
+
+    
