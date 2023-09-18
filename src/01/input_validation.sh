@@ -30,7 +30,7 @@ function print_usage {
   echo -e '\tParameter 6 - the file size (in kilobytes, but not more than 100).'
   echo
   echo "${bold}EXAMPLE${normal}"
-  echo -e '\tmain.sh /home/test 5 ab 13 cd.ef 3kb'
+  echo -e '\tmain.sh /home/01/test 5 ab 13 cd.ef 3kb'
 }
 
 function validate_input {
