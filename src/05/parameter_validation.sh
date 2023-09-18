@@ -31,6 +31,9 @@ function validate_parameter {
     print_usage
     exit 0;
   fi
+
+  if [ $arg_count -ne 1 ]; then
+    terminate "The script takes exactly 1 arguments as input"; fi
   
   local re_parameter='^[1-4]$'
   if [[ ! $parameter =~ $re_parameter ]]; then
