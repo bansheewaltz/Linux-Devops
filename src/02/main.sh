@@ -50,7 +50,7 @@ printf -v date '%(%d%m%y)T'
 ### --------- ###
 
 
-paths=($(find / -type d -writable | awk '!/bin/ && !/sbin/ && !/sys/ && !/proc/'))
+paths=($(find / -type d -writable 2>/dev/null | awk '!/bin/ && !/sbin/ && !/sys/ && !/proc/'))
 paths=($(shuf -e "${paths[@]}"))
 for path in ${paths[@]}; do
     dir_count=$(rand_int_in_range $dir_count_min $dir_count_max)    
