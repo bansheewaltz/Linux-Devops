@@ -33,6 +33,9 @@ function validate_parameter {
     exit 0;
   fi
   
+  if [ $arg_count -ne 1 ]; then
+    terminate "The script takes exactly 1 arguments as input"; fi
+  
   re_parameter='^[1-3]$'
   if [[ ! $method =~ $re_parameter ]]; then
     terminate "The parameter value should be in a range of 1-3 accordingly to \
