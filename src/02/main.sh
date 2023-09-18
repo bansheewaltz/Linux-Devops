@@ -13,6 +13,7 @@ declare -x file_size_mib=$3
 
 validate_input
 SECONDS=0  # to time script execution
+time_start=$(date +"%T %a %d/%h/%y")  # to time script execution
 
 ### SCRIPT PARAMETERS ###
 memory_limit_gib=1
@@ -57,4 +58,7 @@ for path in ${paths[@]}; do
       break; fi
 done
 
+time_end=$(date +"%T %a %d/%h/%y")
+echo "Script start time: $time_start"
+echo "Script end time: $time_end"
 echo "Script execution time: $(($SECONDS/3600))h:$((($SECONDS/60)%60))m:$(($SECONDS%60))s"
