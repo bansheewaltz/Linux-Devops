@@ -31,7 +31,7 @@ echo \# TYPE $entry gauge
 echo $entry $mem_free
 
 ### container FS
-fs_usage=`du -s --block-size=1 | cut -f1`
+fs_usage=`du -s --block-size=1 / 2>/dev/null | cut -f1`
 entry=s21_container_fs_usage_bytes
 echo \# HELP $entry Number of bytes that are consumed by the container on this filesystem.
 echo \# TYPE $entry gauge
