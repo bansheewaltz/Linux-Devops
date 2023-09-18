@@ -39,7 +39,7 @@ function validate_input {
     print_usage
     exit 0; fi
   if [ $arg_count -ne 3 ]; then
-    terminate "The script takes exactly 6 arguments as input"; fi
+    terminate "The script takes exactly 3 arguments as input"; fi
   
   # first parameter
   re_repeated_characters='\(.\).*\1'
