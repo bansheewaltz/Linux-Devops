@@ -13,6 +13,8 @@ services:
       - ../../:/home
     working_dir: /home
     command: bash -c 'cd 09 && bash main.sh'
+    ports:
+      - 8082:80
   
   network-test:
     build: ../../
