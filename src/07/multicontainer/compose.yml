@@ -6,10 +6,16 @@ services:
     deploy:
       resources:
         limits:
-          memory: 3000m
+          memory: 3072m
     volumes:
       - ../../:/home
     working_dir: /home
+    command: bash -c 'cd 09 && bash main.sh'
+  
+  network-test:
+    build: ../../
+    container_name: test-env2
+    tty: true
 
   node-exporter:
     image: prom/node-exporter:latest
@@ -29,6 +35,7 @@ services:
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
+    # user: "1000:1000"
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - ./prometheus:/prometheus
@@ -46,6 +53,7 @@ services:
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
+    user: "1000:1000"
     volumes:
       - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
       - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
@@ -58,11 +66,15 @@ services:
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.47.2
     container_name: cadvisor
+    privileged: true
     volumes:
       - /:/rootfs:ro
-      - /var/run/docker.sock:/var/run/docker.sock:rw
+      - /var/run:/var/run:rw
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk:/dev/disk:ro
+    devices:
+      - /dev/kmsg
     ports:
       - 8080:8080
     depends_on:
@@ -74,3 +86,11 @@ services:
     container_name: redis
     ports:
       - 6379:6379
+
+  nginx:
+    image: flashspys/nginx-static
+    container_name: nginx
+    volumes:
+      - ../../09:/static
+    ports:
+      - 8081:80
