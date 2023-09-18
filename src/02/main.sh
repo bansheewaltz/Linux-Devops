@@ -49,21 +49,9 @@ printf -v date '%(%d%m%y)T'
 ### --------- ###
 
 
-paths=($(find / -type d))
-while [ ${#paths[@]} -ne 0 ] ; do
-    rand=$((RANDOM % ${#paths[@]}))
-    path=${paths[rand]}
-    arr_remove_element paths $path
-
-    if [ -L "${path%/}" ]; then  # symbolic link check
-      continue; fi
-    if [[ ! -w $path ]]; then   # writability check
-      continue; fi
-    if [[ $path =~ (bin|sbin) ]]; then  # forbidden dirs check
-      continue; fi
-    if (( RANDOM % 2 == 0 )); then  # random skip condition
-      continue; fi
-    
+paths=($(find / -type d -writable | awk '!/bin/ && !/sbin/ && !/sys/ && !/proc/'))
+paths=($(shuf -e "${paths[@]}"))
+for path in ${paths[@]}; do
     dir_count=$(rand_int_in_range $dir_count_min $dir_count_max)    
     if ! generate_filefolder $path $dir_count; then
       break; fi
