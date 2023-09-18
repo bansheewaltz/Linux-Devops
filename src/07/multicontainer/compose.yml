@@ -3,6 +3,8 @@ services:
     build: ../../
     container_name: test-env
     tty: true
+    environment:
+      - TZ=Asia/Novosibirsk
     deploy:
       resources:
         limits:
