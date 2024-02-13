@@ -1,0 +1,43 @@
+stages:
+  - build
+  - lint
+  - test
+  - deploy
+
+build-job:
+  stage: build
+  script:
+    - make s21_grep s21_cat
+  artifacts:
+    paths:
+      - build/bin/s21_cat
+      - build/bin/s21_grep
+    expire_in: 30 days
+  after_script:
+    - bash .gitlab/notify.sh
+
+lint-test:
+  stage: lint
+  script:
+    - find src -name '*.c' | xargs clang-format -Werror -n
+  after_script:
+  - bash .gitlab/notify.sh
+
+unit-test:
+  stage: test
+  script:
+    - make test
+  after_script:
+    - bash .gitlab/notify.sh
+
+deploy-app:
+  stage: deploy
+  when: manual
+  allow_failure: false
+  script:
+    - bash .gitlab/deploy.sh
+  after_script:
+    - bash .gitlab/notify.sh
+
+
+    
